@@ -1,0 +1,28 @@
+﻿
+Identifier:   DCAT-MEX-INEGI-SCNM.PIBE-AB2013-017
+
+Title:   Sistema de Cuentas Nacionales de México. Producto Interno Bruto por Entidad Federativa. Serie detallada.
+
+Description:   INEGI. Sistema de Cuentas Nacionales de México. Producto Interno Bruto por Entidad Federativa. SNIEG. Información de Interés Nacional. Permite conocer anualmente el comportamiento y composición de las actividades económicas de los estados, presentándose con base en el Sistema de Clasificación Industrial de América del Norte 2013
+
+Modified:   2019-12-04
+
+Publisher:   Instituto Nacional de Estadística y Geografía, INEGI
+
+Mbox:   atencion.usuarios@inegi.org.mx
+
+License:   https://www.inegi.org.mx/inegi/terminos.html
+
+DataDictionary:   
+
+Keyword:   "producto interno bruto","estatal","valor","agregado","economia","actividad economica"
+
+ContactPoint:   Lic. José de Jesús Esquivel de la Rosa, 800 111 4634
+
+Temporal:   2003-01-2018-12
+
+Spatial:   Estados Unidos Mexicanos
+
+AccrualPeriodicity:   Anualmente
+
+Distribution:   https://www.inegi.org.mx/programas/pibent/2013/
