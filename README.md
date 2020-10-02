@@ -1,2 +1,2 @@
 # Tesis
-Tesis, modelo log-log y aversión al riesgo
+Modelo log-log y aversión al riesgo. 
