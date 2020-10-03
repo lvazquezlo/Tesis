@@ -1,0 +1,346 @@
+---
+title: "EDA"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Cargamos los paquetes que se utilizan para el análisis exploratorio de datos
+
+```{r paquetes}
+
+if (!require("DataExplorer")) install.packages("DataExplorer")
+library(DataExplorer)
+if (!require("ggcorrplot")) install.packages("ggcorrplot")
+library(ggcorrplot)
+if (!require("patchwork")) install.packages("patchwork")
+library(patchwork)
+
+library(tidyverse)
+library(lubridate)
+library(readxl)
+library(scales)
+library(rvest)
+
+theme_set(theme_light())
+
+```
+
+Cargamos tablas generadas en el archivo data_manipulation.R
+
+```{r load data}
+
+tablas <- readRDS("Output/tabla_inputs.rds")
+
+df.aventurate <- tablas[[1]] %>% mutate(ID = as.factor(ID))
+df.educativo <- tablas[[2]] %>% mutate(ID = as.factor(ID))
+df.sueno <- tablas[[3]] %>% mutate(ID = as.factor(ID))
+df.tradicional <- tablas[[4]] %>% mutate(ID = as.factor(ID))
+
+```
+
+
+Boxplots
+
+```{r graficas v1}
+p.aventurate <- ggplot(data = df.aventurate, aes(x = ID, y = log(Venta_Estado))) + geom_boxplot() + 
+  geom_dotplot(binaxis='y',
+               stackdir='center',
+               dotsize = .18,
+               fill="red") + 
+  labs(title = "Boletos vendidos por Estado",
+       subtitle = "Sorteo: Aventurate",
+       x = "Estado",
+       y = "ln(# Boletos)")
+p.aventurate
+
+p.educ <- ggplot(data = df.educativo, aes(x = ID, y = log(Venta_Estado))) + geom_boxplot() + 
+  geom_dotplot(binaxis='y',
+               stackdir='center',
+               dotsize = .18,
+               fill="red") + 
+  labs(
+       subtitle = "Sorteo: Educativo",
+       x = "Estado",
+       y = "ln(# Boletos)")
+p.educ
+
+p.sueno <- ggplot(data = df.sueno, aes(x = ID, y = log(Venta_Estado))) + geom_boxplot() + 
+  geom_dotplot(binaxis='y',
+               stackdir='center',
+               dotsize = .18,
+               fill="red") + 
+  labs(
+       subtitle = "Sorteo: Mi Sueño",
+       x = "Estado",
+       y = "ln(# Boletos)")
+
+p.sueno
+
+p.trad <- ggplot(data = df.tradicional, aes(x = ID, y = log(Venta_Estado))) + geom_boxplot() + 
+  geom_dotplot(binaxis='y',
+               stackdir='center',
+               dotsize = .18,
+               fill="red") + 
+  labs(
+       subtitle = "Sorteo: Tradicional",
+       x = "Estado",
+       y = "ln(# Boletos)")
+
+p.trad
+
+p.global <- ggplot(data = df.global, aes(x = ID, y = log(Venta_Estado))) + geom_boxplot() + 
+  geom_dotplot(binaxis='y',
+               stackdir='center',
+               dotsize = .18,
+               fill="red") + 
+  labs(title = "Boletos vendidos por Estado",
+       subtitle = "Todos los sorteos",
+       x = "Estado",
+       y = "ln(# Boletos)")
+p.global
+
+(p.aventurate/p.educ)
+(p.sueno/p.trad)
+```
+
+```{r graficas v2 2/10/2020}
+
+# sorteo Aventurate
+ggplot(data = df.aventurate, aes(x = ID, y = Venta_Estado)) + 
+  geom_boxplot() + 
+  geom_dotplot(binaxis='y',
+               stackdir='center',
+               dotsize = .18,
+               fill="red") + 
+  scale_y_continuous(labels = comma) +
+  labs(title = "Boletos vendidos por Estado entre 2015 y 2019",
+       subtitle = "Sorteo: Aventurate",
+       x = "Estado",
+       y = "Boletos vendidos")
+
+# sorteo Educativo
+ggplot(data = df.educativo, aes(x = ID, y = Venta_Estado)) + 
+  geom_boxplot() + 
+  geom_dotplot(binaxis='y',
+               stackdir='center',
+               dotsize = .18,
+               fill="red") + 
+  labs(
+       subtitle = "Sorteo: Educativo",
+       x = "Estado",
+       y = "Boletos Vendidos")
+
+
+# sorteo Sueño
+df.sueno %>%
+#  filter(ID != 19) %>% 
+  ggplot(aes(x = ID, y = Venta_Estado)) + 
+  geom_boxplot() + 
+  geom_dotplot(binaxis='y',
+               stackdir='center',
+               dotsize = .18,
+               fill="red") + 
+  scale_y_continuous(labels = comma) +
+    labs(
+         subtitle = "Sorteo: Mi Sueño",
+         x = "Estado",
+         y = "Boletos Vendidos")
+
+# sorteo Tradicional
+
+df.tradicional %>% 
+  ggplot(aes(x = ID, y = Venta_Estado)) + 
+  geom_boxplot() + 
+  geom_dotplot(binaxis='y',
+               stackdir='center',
+               dotsize = .18,
+               fill="red") + 
+  scale_y_continuous(labels = comma) +
+    labs(
+         subtitle = "Sorteo: Tradicional",
+         x = "Estado",
+         y = "Boletos Vendidos")
+
+
+```
+
+
+Gráficas para ver si existe relación
+
+```{r smooth v1}
+
+p1.aventurate <- ggplot(data = df.aventurate, aes(x = log(Pib_perCap_aven), y = log(Venta_Estado))) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = F) +
+  labs(title = "Boletos Vendidos vs PIB per capita",
+       subtitle = "Sorteo: Aventurate",
+       y = "ln(# Boletos)",
+       x = "ln(PIB per capita)")
+p1.aventurate
+
+p1.educ <- ggplot(data = df.educativo, aes(x = log(Pib_perCap_educ), y = log(Venta_Estado))) +
+  geom_point() + geom_smooth(method = "lm", se = F) +
+  labs(
+       subtitle = "Sorteo: Educativo",
+       y = "ln(# Boletos)",
+       x = "ln(PIB per capita)")
+p1.educ
+
+p1.sueno <- ggplot(data = df.sueno, aes(x = log(Pib_perCap_suen), y = log(Venta_Estado))) +
+  geom_point() + geom_smooth(method = "lm", se = F) +
+  labs(
+       subtitle = "Sorteo: Mi Sueño",
+       y = "ln(# Boletos)",
+       x = "ln(PIB per capita)")
+p1.sueno
+
+p1.trad <- ggplot(data = df.tradicional, aes(x = log(Pib_perCap_trad), y = log(Venta_Estado))) +
+  geom_point() + geom_smooth(method = "lm", se = F) +
+  labs(
+       subtitle = "Sorteo: Tradicional",
+       y = "ln(# Boletos)",
+       x = "ln(PIB per capita)")
+p1.trad
+
+p1.glob <- ggplot(data = df.global, aes(x = log(Pib_perCap), y = log(Venta_Estado))) +
+  geom_point() + geom_smooth(method = "lm", se = F) +
+  labs(title = "Boletos Vendidos vs PIB per capita",
+       subtitle = "Todos los sorteos agregados",
+       y = "ln(# Boletos)",
+       x = "ln(PIB per capita)")
+p1.glob
+
+(p1.aventurate/p1.educ)
+(p1.sueno/p1.trad)
+
+p.pibPc <- ggplot(data = df.global, aes(x = ID, y = log(Pib_perCap))) + geom_boxplot() +
+  labs(title = "PIB per capita por Estado",
+       y = "ln(PIB pc)",
+       x = "Estado")
+p.pibPc
+
+p.pib <- ggplot(data = df.global, aes(x = ID, y = log(Pib))) + geom_boxplot() +
+  labs(title = "PIB por Estado",
+       y = "ln(PIB)",
+       x = "Estado")
+
+p.pib
+
+
+
+```
+
+
+```{r smoot v2 2/20/2020}
+
+df.aventurate %>% 
+  ggplot(aes(x = log(Pib_perCap_aven), y = log(Venta_Estado))) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = F) +
+  labs(title = "Boletos Vendidos vs PIB per capita",
+       subtitle = "Sorteo: Aventurate",
+       y = "ln(# Boletos)",
+       x = "ln(PIB per capita)")
+
+
+
+```
+
+Hacemos más análisis
+
+Vamos a buscar que estados son los que tienen una mayor venta de boletos. 
+Se hace el análisis para todos los sorteos.
+
+Vamos a obtener primero en que estados existe un campus TEC
+
+```{r}
+
+sedes <- read_html("https://es.wikipedia.org/wiki/Instituto_Tecnol%C3%B3gico_y_de_Estudios_Superiores_de_Monterrey") %>% 
+  html_nodes("table") %>% 
+  map(html_text) %>% 
+  .[3] %>% 
+  as.data.frame(col.names = "sedes_tec") %>% 
+  mutate(sedes_tec = str_split(sedes_tec, "\n")) %>% 
+  unnest(sedes_tec) %>% 
+  filter(sedes_tec != "")
+
+sedes$sedes_tec
+
+sedes_tec <- c("Nuevo Leon", "Chihuahua", "Coahuila de Zaragoza", "Tamaulipas", "Puebla", "Veracruz de Ignacio de la Llave", "Chiapas", "Morelos", "Hidalgo", "Estado de Mexico", "Distrito Federal", "Jalisco", "Aguascalientes", "Sonora", "Colima", "Sinaloa", "Zacatecas", "Michoacan de Ocampo", "Queretaro", "Guanajuato", "San Luis Potosi")
+
+sedes_tec <- as_tibble(sedes_tec) %>% 
+  mutate(campus = "SI")
+
+sedes_tec
+
+```
+
+
+```{r}
+
+# sorteo Aventurate
+
+df.aventurate %>% 
+  group_by(Estado) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>% 
+  ungroup() %>% 
+  left_join(sedes_tec, by = c("Estado" = "value"))%>% 
+  mutate(campus = if_else(is.na(campus), "NO", campus),
+         Estado = fct_reorder(Estado, n_boletos)) %>% 
+  ggplot(aes(n_boletos, Estado, fill = campus)) +
+  geom_col() +
+  scale_x_continuous(labels = comma) +
+  labs(title = "Número de boletos vendidos (2015 - 2019)",
+       subtitle = "Sorteo: Aventúrate",
+       x = "Boletos Vendidos",
+       y = "")
+
+
+df.educativo %>% 
+  group_by(Estado) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>% 
+  mutate(Estado = fct_reorder(Estado, n_boletos)) %>% 
+  ggplot(aes(n_boletos, Estado)) +
+  geom_col(color = "grey", fill = "royalblue3") +
+  scale_x_continuous(labels = comma) +
+  labs(title = "Número de boletos vendidos (2015 - 2019)",
+       subtitle = "Sorteo: Educativo",
+       x = "Boletos Vendidos",
+       y = "")
+
+
+df.sueno %>% 
+  group_by(Estado) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>% 
+  mutate(Estado = fct_reorder(Estado, n_boletos)) %>% 
+  ggplot(aes(n_boletos, Estado)) +
+  geom_col(color = "grey", fill = "royalblue3") +
+  scale_x_continuous(labels = comma) +
+  labs(title = "Número de boletos vendidos (2015 - 2019)",
+       subtitle = "Sorteo: Mi Sueño",
+       x = "Boletos Vendidos",
+       y = "")
+
+df.tradicional %>% 
+  group_by(Estado) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>% 
+  mutate(Estado = fct_reorder(Estado, n_boletos)) %>% 
+  ggplot(aes(n_boletos, Estado)) +
+  geom_col(color = "grey", fill = "royalblue3") +
+  scale_x_continuous(labels = comma) +
+  labs(title = "Número de boletos vendidos (2015 - 2019)",
+       subtitle = "Sorteo: Tradicional",
+       x = "Boletos Vendidos",
+       y = "")
+
+
+```
+
+
+
+
