@@ -1,0 +1,217 @@
+\chapter{Antecedentes y revisión de literatura}
+
+%\noindent Este capítulo está dividido en dos secciones.  
+
+\newpage
+
+\section{Antecedentes}
+
+\subsection{Bernoulli}
+
+El término utilidad fue presentado por primera vez en el siglo XVIII cuando Bernoulli y Cramer publican \textit{“Exposition of a New Theory on the Measurement of Risk”}\footnote{Bernoulli, D. (1954). \textit{Exposition of a New Theory on the Measurement of Risk}. Econometrica, 22(1), 23–36.} y se utiliza para dar solución a la paradoja de San Petersburgo. La versión estándar consiste en un juego con las siguientes reglas: una moneda honesta es lanzada hasta que caiga por primera vez en águila, en este punto el jugador gana $2^i$, donde $i$ es el número de veces que la moneda fue lanzada. \\
+
+La pregunta resulta ser ¿Cuánto dinero está dispuesto el jugador a pagar para participar en este juego? para contestar la pregunta observamos que la probabilidad de obtener águila por primera vez en el i-ésimo lanzamiento es $(\frac{1}{2})^i$. \\
+
+Por lo que el valor esperado de este juego resulta en: $$E[x] = \sum_{i = 1} ^{\infty} \pi_i x_i = \sum_{i = 1} ^{\infty} 2^i (\frac{1}{2})^i = \infty $$ 
+
+Esto querría decir que existiría un incentivo a que una persona pague un millón de pesos para poder jugar pues el millón de pesos resulta ser mucho menor que el valor esperado del juego.\\
+
+La solución de Bernoulli recae en el argumento sobre que las personas no les interesa directamente cuánto es la ganancia monetaria del juego sino depende de la utilidad que esta ganancia monetaria genere en los individuos. Si se asume que la utilidad marginal de la riqueza decrece cuando la riqueza aumenta, esto es, que la curva de utilidad sea cóncava, el juego puede converger a una utilidad esperada finita con la cual se puede determinar el valor que estaría dispuesto a pagar un individuo por participar en el juego a lo cual Bernoulli llama \textit{“moral value”}. Se presenta una solución a la paradoja: \\
+
+Suponga que la utilidad del premio a recibir en el juego está dado por $U(x_i) = ln(x_i)$, esta función logarítimica cumple con ser cónvaca pues $U^\prime > 0$ y $U^{\prime \prime} < 0$. Calculamos la utilidad esperada y resulta que
+
+$$
+E[U(x_i)] = \sum_{i = 1} ^{\infty} \pi_i U(x_i) = \sum_{i = 1} ^{\infty} (\frac{1}{2})^i ln(2^i)= 2 ln(2)
+$$
+
+De esta forma, observamos que la utilidad esperada de este juego es aproximadamente 1.39.
+
+\newpage
+
+\subsection{Von Neumann y Morgenstern}
+
+En 1944 Von Neumann y Morgenstern publican su libro “Theory of Games and Economic Behavior”\footnote{Neumann, V. J., \& Morgenstern, O. (1953). \textit{Theory of Games and Economic Behavior} (3rd ed.). New York, United States: Princeton University Press.} donde se presentan modelos matemáticos para estudiar el comportamiento económico de los individuos bajo condiciones de incertidumbre.   \\
+
+Definiremos qué es una lotería simple, término que se utilizará para explicar el \textit{Teorema de Utilidad Esperada}.
+
+\begin{itemize}
+    \item Una \textit{lotería simple L} es una lista $L = (p_1, \dots, p_N)$ con $p_n \geq 0$ $\forall n$ y $\sum_n p_n = 1$, donde $p_n$ es la probabilidad de que ocurra el evento $n$.
+\end{itemize}
+
+Si definimos $\mathscr{L}$ como el conjunto de alternativas u opciones a las que se enfrenta un individuo y utilizamos la definición de \textit{lotería simple} donde los eventos a ocurrir son diferentes pagos monetarios, entonces $\mathscr{L}$ queda definido como el espacio de loterías. \\
+
+Para que las preferencias sean racionales se deben de cumplir los siguientes puntos:
+
+\begin{itemize}
+    \item Exista una relación de preferencias racional $\succeq$ a $\mathscr{L}$. Esto se da cuando se cumplen las siguientes dos propiedades:
+    \begin{enumerate}
+        \item \textbf{Completitud}: $\forall$ $L,L^\prime \in \mathscr{L}$ se tiene que $L \succeq L^\prime$ o $L^\prime \succeq L$ o los prefiere igual.
+        
+        \item \textbf{Transitividad}: $\forall$ $L,L^\prime, L^{\prime \prime} \in \mathscr{L}$, si $L \succeq L^\prime $ y $L^\prime \succeq L^{\prime \prime} \Rightarrow L \succeq L^{\prime \prime}$.
+    \end{enumerate}
+    
+    \item Continuidad: si para cualquier $L,L^\prime, L^{\prime \prime} \in \mathscr{L}$ los conjuntos
+    $$\{ \alpha \in [0,1] : \alpha L + (1-\alpha)L \succeq L^{\prime \prime}\} \subset [0,1]$$
+    $$\{ \alpha \in [0,1] : L^{\prime \prime} \succeq \alpha L + (a- \alpha) L^\prime \} \subset [0,1]$$
+    
+    son cerrados. Esto implica la existencia de una función de utilidad que representa $\succeq$, una función $U: \mathscr{L} \rightarrow \mathbb{R}$ tal que $L \succeq L^\prime \Leftrightarrow U(L) \geq U(L^\prime)$.
+    
+    \item Axioma de independencia: la relación de preferencia $\succeq$ en el espacio de loterías simples $\mathscr{L}$ satisface este axioma si para todo $L,L^\prime, L^{\prime \prime} \in \mathscr{L}$ y $\alpha \in (0,1)$ se tiene
+    $$
+    L \succeq L^\prime \Leftrightarrow \alpha L + (1-\alpha)L^{\prime \prime} \succeq \alpha L^{\prime} + (1-\alpha)L^{\prime \prime}
+    $$
+    En otras palabras, esto significa que si mezclamos cada una de las dos loterías con una tercera, el orden de preferencia de las mezclas no depende de la tercera lotería usada en particular.
+\end{itemize}
+
+Uno de los teoremas dentro del análisis de la elección bajo incertidumbre es el \textit{Teorema de la Utilidad Esperada} en el que Von Neumann y Morgenster mencionan que si las preferencias de los individuos cumplen los axiomas de racionalidad entonces sus preferencias podían ser representadas por una función de utilidad. \\
+
+El \textit{Teorema de la Utilidad Esperada} (Mass-Collel et al,1995, p.176) dice que, si suponemos que la relación de preferencia racional $\succeq$ en el espacio de loterías $\mathscr{L}$ satisface los axiomas de continuidad e independencia entonces $\succeq$ admite una representación de la utilidad en forma de utilidad esperada. Esto es, podemos asignar un número $u_n$ a cada pago $n = 1, \dots, N$ de tal manera que para cualesquiera dos loterías $L = (p_1,\dots,p_N)$ y $L^\prime = (p^{\prime}_1,\dots, p^{\prime}_N)$ se tiene que
+
+$$
+L \succeq L^\prime \Leftrightarrow \sum ^{N}_{n = 1} u_n p_n \geq \sum ^{N}_{n = 1} u_n p^{\prime}_n
+$$ \\
+
+Este teorema ha generado mucha discusión al paso de los años; uno de los comentarios más fuertes que se le ha hecho al Teorema de Utilidad Esperada ha sido la \textit{paradoja de Allais} (Mass-Collel et al, 1995, p.179) formulada en 1953 por Maurice Allais. En ella se plantea un experimento como el siguiente: \\
+
+Existen tres posibles premios monetarios
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ccc}
+Premio 1     & Premio 2  & Premio 3 \\
+\$ 1,250,000 & \$250,000 & \$0     
+\end{tabular}
+\end{table}
+
+El jugador se enfrenta a dos conjuntos de decisión. El primer conjunto está conformado por dos loterías $L_1 = (0,1,0)$ y $L^{\prime}_1 =$ (0.10, 0.89, 0.01). La primer lotería consiste en obtener con seguridad \$250,000; la segunda lotería consiste en obtener \$1,250,000 con probabilidad 0.10, \$250,000 con probabilidad 0.89 y \$0 con probabilidad 0.01. \\
+
+El segundo conjunto está conformado por dos loterías $L_2 =$ (0, 0.11, 0.89) y $L^{\prime}_2 =$ (0.10 , 0, 0.90). La primer lotería consiste en obtener \$250,000 con probabilidad 0.11 y \$0 con probabilidad 0.89; la segunda lotería consiste en obtener \$1,250,000 con probabilidad 0.10 y \$0 con probabilidad 0.90. \\
+
+Con esto, Allais muestra que los individuos expresan sus preferencias tal que $L_1 \succeq L^{\prime}_1$ y $L^{\prime}_2 \succeq L_2$ lo cual presenta inconsistencias a la teoría de utilidad esperada. Se comprueba de la siguiente manera: \\
+
+Supongamos una función de utilidad U(·) y aplicamos el \textit{Teorema de Utilidad Esperada}, tenemos que $L_1 \succeq L^{\prime}_1 \Leftrightarrow U(L_1) \geq U(L^{\prime}_1)$ entonces,
+
+\begin{align*}
+    & (1)U(250,000) \geq (0.1)U(1,250,000)+(0.89)U(250,000)+(0.01)U(0)
+\end{align*}
+\noindent restamos 0.89U(250,000) de ambos lados
+\begin{align*}
+    & (0.11)U(250,000) \geq (0.1)U(1,250,000) + (0.01)U(0)
+\end{align*}
+\noindent sumamos 0.89U(0) de ambos lados
+\begin{align*}
+    & (0.11)U(250,000) + (0.89)U(0) \geq (0.1)U(1,250,000) + (0.9)U(0) 
+\end{align*}
+
+Entonces, $U(L_2) \geq U(L^{\prime}_2)$ por lo tanto $L_2 \succeq L^{\prime}_2$. Con lo anterior podemos decir que los individuos deben de escoger $L_1 \succeq L^{\prime}_1$ y $L_2 \succeq L^{\prime}_2$ o $L^{\prime}_1 \succeq L_1$ y $L^{\prime}_2 \succeq L_2$ y es aquí donde Allais encuentra la inconsistencia.
+
+\newpage
+
+\section{Revisión de literatura}
+
+\subsection{Levi Pérez y Brad Humphreys} 
+
+En 2011, L. Pérez y B. Humphreys publican un artículo titulado \textit{"The Income Elasticity of Lottery: New Evidence from Micro Data".}\footnote{Pérez, L., \& Humphreys, B. R. (2011). \textit{The Income Elasticity of Lottery: New Evidence from Micro Data}. Public Finance Review, 39(4), 551–570.} En su artículo, Peréz y Humphreys hacen un análisis para explicar el gasto en consumo por boletos de la Loteria Nacional en España; de manera general estudiaron los determinantes del gasto en la lotería en los hogares españoles así como la incidencia del impuesto a la lotería para poder identificar patrones en el comportamiento de consumo en los diferentes deciles económicos. \\
+
+Es importante explicar cómo se juega la Lotería Nacional Española, ya que esta lotería se clasifica como pasiva. Esto es, los jugadores escogen su boleto de una serie que está marcado con cinco dígitos entre el 00000 y 99999 (la probabilidad de ganar el premio mayor es de uno en cien mil) y esperan a que se haga el sorteo. Cada serie está dividida en diez, cada jugador tiene la oportunidad de comprar toda la serie o solo un \textit{décimo} de la serie. La lotería en España es casi idéntica a la lotería en México. \\
+
+En la literatura se ha observado comunmente que el gasto asociado a participar en loterías se trata de explicar mediante regresores como el ingreso más otras variables de control de tipo socioeconómicas y demográficas. Con la finalidad de estudiar la relación existente entre las loterías y el ingreso, Pérez y Humphreys estudian esta relación usando dos encuestas realizadas por el Estado. Utilizan un modelo econométrico llamado \textit{Tobit Model} el cual está diseñado para tomar en cuenta la presencia de valores cero en los datos. \\
+
+Asumen que la compra de los boletos de lotería es idéntica a cualquier otro bien de consumo y no se hace ningún supuesto sobre la aversión al riesgo de los individuos. El modelo puede ser descrito de la siguiente forma: 
+
+\begin{align*}
+    & y^* = X_i \beta + u_i \\
+    & y_i = y^* \ \text{si} \ y^* >0 \\
+    & y_i = 0 \ \text{si} \ y^* \leq 0 \\
+    & i = 1,2,\dots, N
+\end{align*}
+
+Donde N es el número de observaciones, $y_i$ es la variable dependiente definida como el gasto individual en boletos de la lotería nacional y $X_i$ es un vector de covarianzas del individuo $i$ de las variables edad, ingreso, ingreso/número de habitantes en el hogar, estado civil, soltero, años de educación y si tiene un empleo. Toman además que $u \sim N(0, \sigma^2_i)$ y de esta manera llegan al \textit{Tobit Estimator} que resulta ser la función de verosimilitud para las N observaciones generado por el modelo. \\
+
+Los resultados obtenidos por Pérez y Humphreys fueron que la edad influía de tal forma que el gasto en boletos de lotería iba incrementando de joven a adulto, teniendo su máximo en 46 años y a partir de esta edad empieza a disminuir; los hombres gastan más en boletos para la lotería que las mujeres; la mayoría son casados/casadas y tienen pocos años de formación académica. \\
+
+Asimismo, Obtienen la estimación de la elasticidad ingreso de los boletos de lotería y concluyen que estos son un \textbf{bien normal al ingreso} y que un incremento en el ingreso hace que las personas que ya juegan a la lotería gasten más en boletos y a las personas que no juegan a la lotería no las incentiva a participar.
+
+\newpage
+
+\subsection{Michael Spiro}
+
+En 1974 M. Spiro publica su artículo "\textit{On The Tax Incidence Of The Pennsylvania Lottery"}\footnote{Spiro, M. H. (1974). \textit{On the Tax Incidence of the Pennsylvania Lottery}. National Tax Journal, 27(1), 57–61.} en donde publica su investigación sobre la estimación de la incidencia de impuestos en la lotería de Pennsylvania. \\
+
+Para poder realizar un estudio a fondo era necesario contar con datos de todas las personas que compraron boletos de lotería, esto implicaba un costo monetario elevado en elaboración de encuestas. Así, se optó por segmentar a la población que compró boletos de lotería de tal manera que se obtuvo un subgrupo de personas que habían ganado algún premio mayor a cien dólares en dicha lotería y de quienes los datos eran posibles de obtener. \\
+
+En total, fueron 1250 individuos que fueron contactados por haber ganado un premio mayor a cien dólares y se les envió un cuestionario, en donde se les pedía indicar en qué categoría económica se encontraba y cuántos boletos habían comprado para el sorteo en el cual fueron ganadores. Alrededor de 300 individuos respondieron el cuestinario y de estos, sólo 271 fueron usados para realizar el análisis. \\
+
+De esta forma, Spiro plantea que el número de boletos comprados por un individuo para el sorteo en el que fue ganador, T, es una función lineal de su ingreso, Y. Esto es, $T = A + bY$. Hace la aclaración de que los impuestos pagados son proporcionales al número de boletos comprados, por lo que T en este análisis puede ser interpretado como boletos o impuestos. Esta hipótesis puede llevar a la conclusión que el impuesto es progresivo si y sólo si se cumplen dos condiciones:
+
+\begin{itemize}
+    \item La ordenada al origen es negativa (A $<$ 0)
+    \item La pendiente es positiva (b $>$ 0)
+\end{itemize}
+
+En el primer modelo $T = A + bY$ se obtuvo la siguiente estimación T = 1.875 + 1.6$x10^{-4}$Y con una \overline{R}$^2$ = 0.029. Se plantea un segundo modelo, un modelo logarítmico lnT = a + b lnY. Este modelo tiene la ventaja de arrojar la elasticidad de los boletos respecto al ingreso, el resultado de la estimación fue ln T = 1.057 + 0.2169 lnY con una \overline{R}$^2$ = 0.023. \\
+
+Así, podemos observar que para los individuos ganadores de premios mayores a cien dólares la elasticidad ingreso es de 0.22. Esto quiere decir que se considera un \textbf{bien normal al ingreso}.
+
+\newpage
+
+\subsection{Emily Oster}
+
+E. Oster publica en 2004 su artículo llamado "\textit{Are All Lotteries Regressive? Evidence from the Powerball"}\footnote{Oster, E. (2004). \textit{Are All Lotteries Regressive? Evidence from the Powerball}. National Tax Journal, 57(2), 179–187.} en donde estudia la relación existente entre el número de boletos de lotería comprados, el premio y el ingreso de los individuos. Oster explica cómo es el comportamiento de la demanda de boletos en diferentes zonas geográficas y, por ende, para diferentes niveles de ingreso. \\
+
+La lotería \textit{Powerball} es originaria de Estados Unidos y participan alrededor de veintidos estados. Se compra un boleto y el jugador selecciona cinco números de cuarenta y nueve posibles (sin reemplazo) y después un número de cuarenta y dos posibles (\textit{powerball}), cuando se hace el sorteo los números son seleccionados al azar y la probabilidad de que salgan los seis es de uno en 80,089,128. También, existe la posibilidad de ganar premios si se le atina a menos de seis números. Los premios van desde los \$10 millones USD (bolsa mínima) y se ha alcanzado una bolsa de hasta \$300 millones USD. \\
+
+Oster utiliza una base de datos de la lotería del estado de Connecticut que contiene información sobre ventas de cada oficina desde agosto de 1999 hasta julio de 2001, la cual esta identificada por el código postal y con ello poder identificar zonas geográficas y así poder determinar la variable ingreso. \\
+
+Una de las primeras observaciones es que las personas de menores ingresos compran más boletos cuando la bolsa del premio es menor, mientras que cuando la bolsa es sustancialmente más grande las personas de mayores ingresos compran más boletos. Para probar esto plantea el siguiente modelo: 
+
+$$
+\text{ln} \ Sales_{i,t} = \alpha + \beta_1 (premio_t) + \beta_2 (\text{ln} \ HH \ Income_i) + \beta_3 (\text{ln} \ HH \ Income_i : premio_t)
+$$
+
+Donde, los índices $i$ son para los códigos postales y $t$ para los índices de tiempo. La variable ln HHIncome es el logaritmo natural del ingreso medio de los habitantes del $i$ código postal. La variable dependiente es el logaritmo natural de las ventas por persona de boletos de la lotería. \\
+
+Ahora bien, el coeficiente de interés para Oster es $\beta_3$, que representa la elasticidad ingreso de las ventas respecto al tamaño del premio. La estimación del modelo resulta en $\alpha = $ -1.066, \ $\beta_1 = $ 0.011, $\beta_2 = $ -0.709 \ y $\beta_3 = $ 0.00214 (todos los coeficientes fueron significativos al 1\%). \\
+
+Así, se obtuvo que la elasticidad ingreso es de 0.0021, esto implica que un aumento en el 10\% del ingreso incrementa la sensibilidad en la respuesta al premio en un 0.02\%. Con el resultado anterior, se obtiene que el boleto es un \textbf{bien nomal al ingreso}. Después de obtener esta elasticidad, Oster realiza otra regresión en donde las ventas están en función de los ingresos medios de los participantes de la muestra y compara el resultado contra el tamaño de la bolsa del premio. Encuentra que la elasticidad ingreso aumenta a medida que el premio aumenta.   
+
+
+
+
+
+
+
+
+
+% La siguiente gráfica está hecha a mano porque la que arroja R se pixelea un poco al importarla a LaTeX. Pueden apoyarse en Excel para obtener las coordenadas más rápido
+
+%\begin{figure}[H]
+%\begin{center}
+%\caption{PIB mundial de los últimos dos milenios}
+%\label{PIB_MUN}
+%\begin{tikzpicture}
+%\begin{axis}[
+%    xlabel={Año},
+%    ylabel={PIB (billones)},
+%    xtick pos=left,
+%    ytick pos=left,
+%    xtick={500,1000,1500,2000},
+%    ytick={0,50,100},
+%    scale only axis=true,
+%    width=0.6\textwidth,
+%    height=0.4\textwidth,
+%]
+% 
+%\addplot[
+%    color=red,
+%    ]
+%    coordinates {
+%    (1,0)(1000,0)(1500,0)(1600,1)(1700,1)(1820,1)(1870,2)(1900,%3)(1913,5)(1940,8)(1950,9)(1951,10)(1952,10)(1953,11)(1954,11)(%1955,12)(1956,12)(1957,13)(1958,13)(1959,14)(1960,15)(1961,15)(%1962,16)(1963,17)(1964,18)(1965,19)(1966,20)(1967,20)(1968,22)(%1969,23)(1970,24)(1971,25)(1972,26)(1973,28)(1974,28)(1975,29)(1976,30)(1977,31)(1978,33)(1979,34)(1980,35)(1981,35)(1982,36)(1983,37)(1984,38)(1985,40)(1986,41)(1987,43)(1988,45)(1989,46)(1990,47)(1991,48)(1992,48)(1993,49)(1994,51)(1995,53)(1996,55)(1997,57)(1998,58)(1999,60)(2000,63)(2001,65)(2002,66)(2003,69)(2004,73)(2005,76)(2006,80)(2007,85)(2008,87)(2009,87)(2010,91)(2011,95)(2012,98)(2013,101)(2014,105)(2015,108)
+%    };
+    
+%\end{axis}
+%\end{tikzpicture}
+
+%\imagesource{elaboración propia con datos de Maddison (2010) y el Banco Mundial.}
+%\end{center}
+%\end{figure}
