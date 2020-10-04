@@ -187,3 +187,8 @@ df.global <- df.global %>%
 
 View(df.global)
 
+
+tablas <- list(df.educativo, df.aventurate, df.sueno, df.tradicional, df.global)
+tabla_inputs <- saveRDS(tablas, "Output/tabla_inputs.rds")
+
+

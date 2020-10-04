@@ -25,10 +25,44 @@ library(lubridate)
 library(readxl)
 library(scales)
 library(rvest)
+library(janitor)
+library(corrplot)
 
 theme_set(theme_light())
 
 ```
+
+Directorio
+
+```{r directorio}
+
+ruta <- "~/Documents/itam/Tesis_git/"
+setwd(ruta)
+
+```
+
+```{r sedes tec}
+
+sedes <- read_html("https://es.wikipedia.org/wiki/Instituto_Tecnol%C3%B3gico_y_de_Estudios_Superiores_de_Monterrey") %>% 
+  html_nodes("table") %>% 
+  map(html_text) %>% 
+  .[3] %>% 
+  as.data.frame(col.names = "sedes_tec") %>% 
+  mutate(sedes_tec = str_split(sedes_tec, "\n")) %>% 
+  unnest(sedes_tec) %>% 
+  filter(sedes_tec != "")
+
+sedes$sedes_tec
+
+sedes_tec <- c("Nuevo Leon", "Chihuahua", "Coahuila de Zaragoza", "Tamaulipas", "Puebla", "Veracruz de Ignacio de la Llave", "Chiapas", "Morelos", "Hidalgo", "Estado de Mexico", "Distrito Federal", "Jalisco", "Aguascalientes", "Sonora", "Colima", "Sinaloa", "Zacatecas", "Michoacan de Ocampo", "Queretaro", "Guanajuato", "San Luis Potosi")
+
+sedes_tec <- as_tibble(sedes_tec) %>% 
+  mutate(campus = "Si")
+
+sedes_tec
+
+```
+
 
 Cargamos tablas generadas en el archivo data_manipulation.R
 
@@ -36,10 +70,65 @@ Cargamos tablas generadas en el archivo data_manipulation.R
 
 tablas <- readRDS("Output/tabla_inputs.rds")
 
-df.aventurate <- tablas[[1]] %>% mutate(ID = as.factor(ID))
-df.educativo <- tablas[[2]] %>% mutate(ID = as.factor(ID))
-df.sueno <- tablas[[3]] %>% mutate(ID = as.factor(ID))
-df.tradicional <- tablas[[4]] %>% mutate(ID = as.factor(ID))
+df.educativo <- tablas[[1]] %>% 
+  left_join(sedes_tec, by = c("Estado" = "value")) %>% 
+  mutate(campus = if_else(is.na(campus), "No", campus),
+         ID = as.factor(ID),
+         Fecha = ymd(Fecha),
+         Sorteo = make_clean_names(Sorteo),
+         Sorteo = str_replace_all(Sorteo, "[\\_]", " "),
+         Sorteo = str_to_title(Sorteo)) %>% 
+  rename(pib_pc = Pib_perCap_educ,
+         pib = Pib_educ) %>% 
+  ungroup()
+
+df.aventurate <- tablas[[2]] %>% 
+  left_join(sedes_tec, by = c("Estado" = "value")) %>% 
+  mutate(campus = if_else(is.na(campus), "No", campus),
+         ID = as.factor(ID),
+         Fecha = ymd(Fecha),
+         Sorteo = make_clean_names(Sorteo),
+         Sorteo = str_replace_all(Sorteo, "[\\_]", " "),
+         Sorteo = str_to_title(Sorteo)) %>% 
+  rename(pib_pc = Pib_perCap_aven,
+         pib = Pib_aven) %>% 
+  ungroup()
+
+df.sueno <- tablas[[3]] %>% 
+  left_join(sedes_tec, by = c("Estado" = "value")) %>% 
+  mutate(campus = if_else(is.na(campus), "No", campus),
+         ID = as.factor(ID),
+         Fecha = ymd(Fecha),
+         Sorteo = make_clean_names(Sorteo),
+         Sorteo = str_replace_all(Sorteo, "[\\_]", " "),
+         Sorteo = str_to_title(Sorteo)) %>% 
+  rename(pib_pc = Pib_perCap_suen,
+         pib = Pib_suen) %>% 
+  ungroup()
+
+df.tradicional <- tablas[[4]] %>% 
+  left_join(sedes_tec, by = c("Estado" = "value")) %>% 
+  mutate(campus = if_else(is.na(campus), "No", campus),
+         ID = as.factor(ID),
+         Fecha = ymd(Fecha),
+         Sorteo = make_clean_names(Sorteo),
+         Sorteo = str_replace_all(Sorteo, "[\\_]", " "),
+         Sorteo = str_to_title(Sorteo)) %>% 
+  rename(pib_pc = Pib_perCap_trad,
+         pib = Pib_trad) %>% 
+  ungroup()
+
+df.global <- tablas[[5]] %>% 
+  left_join(sedes_tec, by = c("Estado" = "value")) %>% 
+  mutate(campus = if_else(is.na(campus), "No", campus),
+         ID = as.factor(ID),
+         Fecha = ymd(Fecha),
+         Sorteo = make_clean_names(Sorteo),
+         Sorteo = str_replace_all(Sorteo, "[\\_]", " "),
+         Sorteo = str_to_title(Sorteo)) %>% 
+  rename(pib_pc = Pib_perCap,
+         pib = Pib) %>% 
+  ungroup()
 
 ```
 
@@ -242,8 +331,8 @@ df.aventurate %>%
   ggplot(aes(x = log(Pib_perCap_aven), y = log(Venta_Estado))) +
   geom_point() + 
   geom_smooth(method = "lm", se = F) +
-  labs(title = "Boletos Vendidos vs PIB per capita",
-       subtitle = "Sorteo: Aventurate",
+  labs(title = "Boletos Vendidos vs PIB per capita (log - log)",
+       subtitle = "Sorteo: Aventurate, 2015 - 2019",
        y = "ln(# Boletos)",
        x = "ln(PIB per capita)")
 
@@ -251,95 +340,303 @@ df.aventurate %>%
 
 ```
 
-Hacemos más análisis
+Correlación
 
-Vamos a buscar que estados son los que tienen una mayor venta de boletos. 
-Se hace el análisis para todos los sorteos.
+variables seleccionadas:
+ - n_boletos = número de boletos vendidos
+ - pib_pc = PIB per capita
+ - campus = indicadora si en la entidad x hay campus TEC o no
 
-Vamos a obtener primero en que estados existe un campus TEC
+```{r correlation matrix}
 
-```{r}
+df.aventurate %>%
+  select(Venta_Estado, pib_pc, campus) %>%
+  mutate(campus = if_else(campus == "Si", 1, 0)) %>% 
+  rename(n_boletos = Venta_Estado) %>% 
+  cor() %>% 
+  ggcorrplot(ggtheme = theme_light(),
+             lab = TRUE,
+             colors = c("#E46726", "white", "#6D9EC1")) +
+  labs(title = "Matriz de correlación")
 
-sedes <- read_html("https://es.wikipedia.org/wiki/Instituto_Tecnol%C3%B3gico_y_de_Estudios_Superiores_de_Monterrey") %>% 
-  html_nodes("table") %>% 
-  map(html_text) %>% 
-  .[3] %>% 
-  as.data.frame(col.names = "sedes_tec") %>% 
-  mutate(sedes_tec = str_split(sedes_tec, "\n")) %>% 
-  unnest(sedes_tec) %>% 
-  filter(sedes_tec != "")
-
-sedes$sedes_tec
-
-sedes_tec <- c("Nuevo Leon", "Chihuahua", "Coahuila de Zaragoza", "Tamaulipas", "Puebla", "Veracruz de Ignacio de la Llave", "Chiapas", "Morelos", "Hidalgo", "Estado de Mexico", "Distrito Federal", "Jalisco", "Aguascalientes", "Sonora", "Colima", "Sinaloa", "Zacatecas", "Michoacan de Ocampo", "Queretaro", "Guanajuato", "San Luis Potosi")
-
-sedes_tec <- as_tibble(sedes_tec) %>% 
-  mutate(campus = "SI")
-
-sedes_tec
 
 ```
 
+Diagrama de dispersión para ver si existe alguna relación en la nube de puntos. 
+En primera instancia, se utiliza todo el conjunto de datos para cada sorteo. Se
+grafica log(pib pc) vs log(boletos vendidos).
+
+
+```{r scatter plot}
+
+#Diagnostico, sin transformacion no se ve clara relacion
+df.aventurate %>% 
+  ggplot(aes(pib_pc, Venta_Estado)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+df.aventurate %>% 
+  ggplot(aes(log(pib_pc), log(Venta_Estado))) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+```
+
+Si ahora queremos saber si existe una relación entre el número de boletos vendidos
+y el pib pc para cada Estado. Se hace el mismo diagrama de dispersion pero agrupando
+por Estado. 
+
+Aquí podría mostrar los 7 Estados con mayor incremento en el pib pc y los 7 Estados
+con el menor incremento en el pib pc
+
+Estados con mejor y peor performance
+
+```{r perfomance pib pc estados}
+
+edos <- df.aventurate %>%
+  distinct(Estado) %>% 
+  pull(Estado)
+
+
+df.aventurate %>% 
+  filter(Estado %in% sample(edos, size = 10)) %>% 
+  ggplot(aes(log(pib_pc), log(Venta_Estado))) +
+  geom_point() +
+  facet_wrap(~ Estado, scales = "free_y")
+
+  
+
+```
+
+
+
+Hacemos más análisis
+
+Que sorteo vende más boletos?
+
+Observamos que el sorteo educativo es el que vende más boletos. Esto tendría explicación debido a que a cierto grupo de estudiantes tienen que vender los boletos ligados a alguna ayuda financiera que la Institución les esté otorgando. Recordar que esto es en términos absolutos.
+
+```{r}
+
+df.global %>% 
+  mutate(Sorteo = str_remove(Sorteo, "\\d+"),
+         Sorteo = str_to_title(Sorteo)) %>% 
+  group_by(Sorteo) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>% 
+  mutate(Sorteo = fct_reorder(Sorteo, n_boletos)) %>% 
+  ggplot(aes(n_boletos, Sorteo)) +
+  geom_point(col = "tomato2", size = 3) +
+  geom_segment(aes(x = min(n_boletos),
+                   xend = max(n_boletos),
+                   y = Sorteo,
+                   yend = Sorteo),
+               linetype = "dashed",
+               size = 0.1) +
+  scale_x_continuous(labels = comma) +
+  theme_classic() +
+  labs(title = "Total de boletos vendidos por sorteo ",
+       subtitle = "entre 2015 y 2019",
+       x = "Número de boletos",
+       y = "")
+
+
+```
+
+Si queremos ver ahora en términos relativos, que sorteo ha mejorado/empeorado el nivel de boletos vendidos entre 2015 y 2019 se realiza la siguiente gráfica.
+
+```{r}
+
+df.global %>% 
+  mutate(Sorteo = str_remove(Sorteo, "\\d+")) %>% 
+  group_by(Sorteo, Fecha) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>% 
+  ggplot(aes(Fecha, n_boletos)) +
+  geom_line() +
+  scale_y_continuous(labels = comma) +
+  facet_wrap(~ Sorteo, scales = "free_y") +
+  labs(x = "",
+       y = "Boletos Vendidos",
+       title = "Serie de boletos vendidos",
+       subtitle = "entre 2015 y 2019")
+
+
+
+
+
+```
+
+
+
+
+Vamos a buscar que estados son los que tienen una mayor venta de boletos. 
+Se hace el análisis para todos los sorteos.
 
 ```{r}
 
 # sorteo Aventurate
 
 df.aventurate %>% 
-  group_by(Estado) %>% 
+#  filter(Estado != "Nuevo Leon") %>% 
+  group_by(Estado, campus) %>% 
   summarise(n_boletos = sum(Venta_Estado)) %>% 
   ungroup() %>% 
-  left_join(sedes_tec, by = c("Estado" = "value"))%>% 
-  mutate(campus = if_else(is.na(campus), "NO", campus),
-         Estado = fct_reorder(Estado, n_boletos)) %>% 
+  mutate(Estado = fct_reorder(Estado, n_boletos)) %>% 
+  ggplot(aes(n_boletos, Estado, fill = campus)) +
+  geom_col() +
+  scale_x_continuous(labels = comma) +
+  labs(title = "Número de boletos vendidos entre 2015 y 2019",
+       subtitle = "Sorteo: Aventúrate",
+       x = "Boletos Vendidos",
+       y = "",
+       fill = "Color")
+
+
+df.educativo %>% 
+  group_by(Estado, campus) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>% 
+  ungroup() %>% 
+  mutate(Estado = fct_reorder(Estado, n_boletos)) %>% 
   ggplot(aes(n_boletos, Estado, fill = campus)) +
   geom_col() +
   scale_x_continuous(labels = comma) +
   labs(title = "Número de boletos vendidos (2015 - 2019)",
-       subtitle = "Sorteo: Aventúrate",
-       x = "Boletos Vendidos",
-       y = "")
-
-
-df.educativo %>% 
-  group_by(Estado) %>% 
-  summarise(n_boletos = sum(Venta_Estado)) %>% 
-  mutate(Estado = fct_reorder(Estado, n_boletos)) %>% 
-  ggplot(aes(n_boletos, Estado)) +
-  geom_col(color = "grey", fill = "royalblue3") +
-  scale_x_continuous(labels = comma) +
-  labs(title = "Número de boletos vendidos (2015 - 2019)",
        subtitle = "Sorteo: Educativo",
        x = "Boletos Vendidos",
-       y = "")
+       y = "",
+       fill = "Campus")
 
 
 df.sueno %>% 
-  group_by(Estado) %>% 
+  group_by(Estado, campus) %>% 
   summarise(n_boletos = sum(Venta_Estado)) %>% 
+  ungroup() %>% 
   mutate(Estado = fct_reorder(Estado, n_boletos)) %>% 
-  ggplot(aes(n_boletos, Estado)) +
-  geom_col(color = "grey", fill = "royalblue3") +
+  ggplot(aes(n_boletos, Estado, fill = campus)) +
+  geom_col() +
   scale_x_continuous(labels = comma) +
   labs(title = "Número de boletos vendidos (2015 - 2019)",
        subtitle = "Sorteo: Mi Sueño",
        x = "Boletos Vendidos",
-       y = "")
+       y = "",
+       fill = "Campus")
 
 df.tradicional %>% 
-  group_by(Estado) %>% 
+  group_by(Estado, campus) %>% 
   summarise(n_boletos = sum(Venta_Estado)) %>% 
+  ungroup() %>% 
   mutate(Estado = fct_reorder(Estado, n_boletos)) %>% 
-  ggplot(aes(n_boletos, Estado)) +
-  geom_col(color = "grey", fill = "royalblue3") +
+  ggplot(aes(n_boletos, Estado, fill = campus)) +
+  geom_col() +
   scale_x_continuous(labels = comma) +
   labs(title = "Número de boletos vendidos (2015 - 2019)",
        subtitle = "Sorteo: Tradicional",
        x = "Boletos Vendidos",
-       y = "")
+       y = "",
+       fill = "Campus")
 
 
 ```
+
+Vamos a ver que estados fueron los que más tuvieron ventas, tomaremos como referencia
+entre los 10 y 15 estados que más boletos vendieron. Se hace una disitinción entre 
+si hay campus TEC en el Estado o no. Esto será interesante debido a que empezaremos
+a ver si el que haya un campus TEC marca una diferencia entre vender más boletos o menos.
+
+```{r}
+
+mayores_boletos <- function(df){ 
+  df %>% 
+  group_by(Estado) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>%
+  ungroup() %>% 
+  slice_max(order_by = n_boletos, n = 15) %>% 
+  pull(Estado) %>% 
+  as.character()
+}
+
+df.aventurate %>% 
+  filter(Estado %in% mayores_boletos(df.aventurate)) %>% 
+  group_by(Fecha, Estado, campus) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>% 
+  ggplot(aes(Fecha, n_boletos, color = campus)) +
+  geom_line() +
+  scale_y_continuous(labels = comma) +
+  facet_wrap(~ Estado, scales = "free_y") +
+  labs(title = "Los 15 Estados que mayores ventas tuvieron entre 2015 - 2019",
+       subtitle = "Sorteo: Aventúrate",
+       x = "",
+       y = "Boletos Vendidos",
+       color = "Campus")
+
+df.educativo %>% 
+  filter(Estado %in% mayores_boletos(df.educativo)) %>% 
+  group_by(Fecha, Estado, campus) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>% 
+  ggplot(aes(Fecha, n_boletos, color = campus)) +
+  geom_line() +
+  scale_y_continuous(labels = comma) +
+  facet_wrap(~ Estado, scales = "free_y") +
+  labs(title = "Los 15 Estados que mayores ventas tuvieron entre 2015 - 2019",
+       subtitle = "Sorteo: Educativo",
+       x = "",
+       y = "Boletos Vendidos",
+       color = "Campus")
+
+df.sueno %>% 
+  filter(Estado %in% mayores_boletos(df.sueno)) %>% 
+  group_by(Fecha, Estado, campus) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>% 
+  ggplot(aes(Fecha, n_boletos, color = campus)) +
+  geom_line() +
+  scale_y_continuous(labels = comma) +
+  facet_wrap(~ Estado, scales = "free_y") +
+  labs(title = "Los 15 Estados que mayores ventas tuvieron entre 2015 - 2019",
+       subtitle = "Sorteo: Mi Sueño",
+       x = "",
+       y = "Boletos Vendidos",
+       color = "Campus")
+
+df.tradicional %>% 
+  filter(Estado %in% mayores_boletos(df.tradicional)) %>% 
+  group_by(Fecha, Estado, campus) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>% 
+  ggplot(aes(Fecha, n_boletos, color = campus)) +
+  geom_line() +
+  scale_y_continuous(labels = comma) +
+  facet_wrap(~ Estado, scales = "free_y") +
+  labs(title = "Los 15 Estados que mayores ventas tuvieron entre 2015 - 2019",
+       subtitle = "Sorteo: Tradicional",
+       x = "",
+       y = "Boletos Vendidos",
+       color = "Campus")
+
+
+```
+
+Observamos que para el sorteo Aventúrate hay una tendencia creciente en el número de boletos vendidos de 2015 a 2018, de 2018 a 2019 se observá una clara caida en el número de boletos vendidos. De igual forma, observamos que entre los 15 Estados que mas ventas tuvieron se encuentra 3 Estado que no tienen un campus TEC.
+
+Explicar para los demas sorteos
+
+más análisis
+
+tocamos PIB ?
+
+Vamos a ver que Estados son los que han tenido mejor perfomance en cuestion a su pib pc
+opciones: agarrar los que tengan mejor media en los 5 años de datos o el que tuvo mejor rendimiento (pt/pt-1 -1)
+
+```{r}
+#Se ve casi igual a la del inegi, difiere en el suavizamiento de la curva. Esto se debe a la falta de datos. 
+
+df.global %>% 
+  distinct(Fecha, .keep_all = TRUE) %>% 
+  ggplot(aes(Fecha, pib_pc)) +
+  geom_line()
+
+
+  
+
+```
+
 
 
 
