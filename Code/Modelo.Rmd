@@ -1,0 +1,315 @@
+---
+title: "Modelo Tesis"
+author: "LuisV"
+date: "10/18/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r paquetes}
+library(tidyverse)
+library(skimr)
+library(normtest)
+library(nortest)
+library(MASS)
+library(car)
+library(moments)
+
+```
+
+Directorio
+
+```{r directorio}
+
+ruta <- "~/Documents/itam/Tesis_git/"
+setwd(ruta)
+
+```
+
+Cargamos data
+
+```{r}
+
+data_modelo <- readRDS(file = "Output/data_modelo.rds")
+
+df.aventurate <- data_modelo[[1]]
+df.educativo <- data_modelo[[2]] %>% 
+  na.omit()
+df.sueno <- data_modelo[[3]]
+df.tradicional <- data_modelo[[4]]
+df.global <- data_modelo[[5]]
+
+
+```
+
+Probemos modelar el ingreso de la oficina virtual como una ponderación.
+El ingreso se obtendrá como el % de participación en la venta de boletos del estado i
+por el ingreso per capita del estado i
+
+$$
+pib pc = \sum_i w_i*pibpc_i
+$$
+
+
+```{r pibpc oficina virtual}
+
+total_boletos <- df.aventurate %>% 
+  filter(Estado != "Oficina Virtual") %>% 
+  group_by(Sorteo) %>% 
+  summarise(total_boletos = sum(Venta_Estado)) %>% 
+  ungroup()
+
+df.aventurate %>% 
+  filter(Estado != "Oficina Virtual") %>% 
+  group_by(Estado, Sorteo) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>% 
+  ungroup() %>% 
+  left_join(total_boletos, by = "Sorteo") %>% 
+  mutate(pct_boletos = n_boletos/total_boletos) %>% 
+  select(Estado, Sorteo, pct_boletos)
+  
+
+  
+
+
+```
+
+Modelos
+
+Se presenta el primero modelo :
+
+ln(boletos) ~ ln(pib_pc) 
+
+Las pruebas visuales muestran que para los sorteos mi sueño y tradicional no se cumple
+el supuesto de normalidad por lo que se procede a realizar la transformación box-cox
+para "normalizar los residuales"
+
+
+
+```{r modelo 1}
+
+mod_log_log <- function(df){
+  df %>%
+  mutate(campus = if_else(campus == "Si", 1, 0),
+         campus = as.factor(campus)) %>% 
+  lm(log(Venta_Estado) ~ log(pib_pc), data = .)
+} 
+
+#Aventurate  
+aven1 <- mod_log_log(df.aventurate)
+
+autoplot(aven1)
+jb.norm.test(aven1$residuals)
+ad.test(aven1$residuals)
+
+#Educativo
+educ1 <- mod_log_log(df.educativo)
+autoplot(educ1)
+jb.norm.test(educ1$residuals)
+ad.test(educ1$residuals)
+
+#Mi sueño
+suen1 <- mod_log_log(df.sueno)
+autoplot(suen1)
+jb.norm.test(suen1$residuals)
+ad.test(suen1$residuals)
+#Tradicional
+trad1 <- mod_log_log(df.tradicional)
+autoplot(trad1)
+jb.norm.test(trad1$residuals)
+ad.test(trad1$residuals)
+
+#Agrupamos en una tabla
+
+stargazer(aven1, educ1, suen1, trad1, type = "latex")
+
+```
+
+Transformación box-cox
+
+Se realiza transformación box-cox a los modelos mi sueño y tradicional
+
+```{r box-cox}
+
+mod1_suen <- lm(log(Venta_Estado) ~ log(pib_pc), data = df.sueno)
+boxcox(mod1_suen)
+
+mod1_suen_trans <- lm(log((Venta_Estado)^(1/2)) ~ log(pib_pc), data = df.sueno)
+plot(mod1_suen_trans)
+hist(mod1_suen_trans$residuals)
+
+
+```
+
+
+
+
+Se presenta el segundo modelo:
+
+ln(boletos) ~ ln(pib pc) + campus
+
+campus: variable indicadora en donde se 1 si existe un campus tec en la entidad y 0 en caso contrario
+Agregar esta variable fue por comentarios recibidos de los sinodales
+
+```{r modelo 2}
+
+mod_log_log2 <- function(df){
+  df %>%
+  mutate(campus = if_else(campus == "Si", 1, 0),
+         campus = as.factor(campus)) %>% 
+  lm(log(Venta_Estado) ~ log(pib_pc) + campus, data = .)
+}
+
+#Aventurate  
+aven2 <- mod_log_log2(df.aventurate)
+summary(aven2)
+autoplot(aven2)
+jb.norm.test(aven2$residuals)
+
+#Educativo
+educ2 <- mod_log_log2(df.educativo)
+summary(educ2)
+autoplot(educ2)
+jb.norm.test(educ2$residuals)
+
+#Mi sueño
+suen2 <- mod_log_log2(df.sueno)
+summary(suen2)
+autoplot(suen2)
+jb.norm.test(suen2$residuals)
+
+#Tradicional
+trad2 <- mod_log_log2(df.tradicional)
+summary(trad2)
+autoplot(trad2)
+jb.norm.test(trad2$residuals)
+
+
+
+hist(trad2$residuals)
+#Agrupamos en una tabla
+
+stargazer(aven2, educ2, suen2, trad2, type = "latex")
+
+
+```
+
+Se presenta el tercer modelo:
+
+boletos ~ pib_pc + pib_pc^2
+
+Aquí si de ley se tiene que hacer alguna transormación.
+
+```{r}
+
+mod_sq <- function(df){
+  df %>%
+  mutate(campus = if_else(campus == "Si", 1, 0),
+         campus = as.factor(campus)) %>% 
+  lm(Venta_Estado ~ pib_pc + I(pib_pc ^ 2), data = .)
+} 
+
+
+
+```
+
+```{r}
+
+mod <- lm(Venta_Estado ~ pib_pc + I(pib_pc ^ 2), data = df.aventurate)
+summary(mod)
+
+b <- boxcox(mod)
+
+lambda <- b$x # lambda values
+
+lik <- b$y # log likelihood values for SSE
+
+bc <- cbind(lambda, lik) # combine lambda and lik
+
+sorted_bc <- bc[order(-lik),] # values are sorted to identify the lambda value for the maximum log likelihood for obtaining minimum SSE
+
+head(sorted_bc, n = 10)
+
+
+mod_t <- lm(Venta_Estado^(-0.10) ~ pib_pc + I(pib_pc ^ 2), data = df.aventurate)
+
+plot(mod_t$fitted.values, rstandard(mod_t)) # raw residuals vs fitted values
+
+summary(mod_t)
+
+hist(mod_t$residuals)
+qqPlot(rstandard(mod_t))
+
+skewness(mod_t$residuals)
+kurtosis(mod_t$residuals)
+
+adj_rsq1 <- summary(mod)$adj.r.squared
+
+adj_rsq2 <- summary(mod_t)$adj.r.squared
+
+cat("Adjusted R-Square (before transformation):", adj_rsq1, "Adjusted R-Square (after transformation):", adj_rsq2, sep = "\n")
+
+original <- mod$fitted.values
+
+after_transformation <- mod_t$fitted.values
+
+back_transformation <- mod_t$fitted.values^(-10)
+
+fittedvalues <- data.frame(original, after_transformation, back_transformation)
+
+head(fittedvalues, n = 10)
+
+jb.norm.test(rstandard(mod_t)) #Segun la prueba ya se distribuye normal
+
+```
+
+
+
+```{r modelo 3}
+
+
+
+#Aventurate  
+aven_sq <- mod_sq(df.aventurate)
+summary(aven_sq)
+hist(aven_sq$residuals)
+autoplot(aven_sq)
+jb.norm.test(aven_sq$residuals)
+plot(aven_sq)
+
+#Educativo
+educ_sq <- mod_sq(df.educativo)
+autoplot(educ_sq)
+jb.norm.test(educ_sq$residuals)
+autoplot(educ_sq)
+
+#Mi sueño
+suen_sq <- mod_sq(df.sueno)
+autoplot(suen_sq)
+jb.norm.test(suen_sq$residuals)
+
+#Tradicional
+trad_sq <- mod_sq(df.tradicional)
+autoplot(trad_sq)
+jb.norm.test(trad_sq$residuals)
+
+#Agrupamos en una tabla
+
+stargazer(aven_sq, educ_sq, suen_sq, trad_sq, type = "text")
+
+
+
+
+```
+
+
+
+
+
+
+

@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Cargamos los paquetes que se utilizan para el análisis exploratorio de datos
 
-```{r}
+```{r instalacion paquetes}
 
 if (!require("DataExplorer")) install.packages("DataExplorer")
 if (!require("ggcorrplot")) install.packages("ggcorrplot")
@@ -165,7 +165,7 @@ df.global <- tablas[[5]] %>%
 
 Estados que se consideraran para el modelo
 
-```{r}
+```{r ids modelo}
 
 nuevos_ids %>% 
   left_join(sedes_tec, by = c("Estado" = "value")) %>%
@@ -598,6 +598,32 @@ df.global %>%
 
 ```
 
+Vemos ahora por Estado, que sorteo se vende más?
+
+Observamos que Nuevo León sigue siendo el que más boletos vende por mucho.
+También se observa que el sorteo Educativo es el que más se vende entre 2015 y 2019
+en todos los estados.
+
+```{r}
+
+df.global %>% 
+  mutate(Sorteo = str_remove(Sorteo, "\\d+"),
+         Sorteo = str_to_title(Sorteo)) %>%
+  group_by(Estado, Sorteo) %>% 
+  summarise(n_boletos = sum(Venta_Estado)) %>%
+  ungroup() %>% 
+  mutate(Estado = fct_reorder(Estado, n_boletos, sum)) %>% 
+  ggplot(aes(n_boletos, Estado, fill = Sorteo)) +
+  geom_bar(stat = "identity") +
+  scale_x_continuous(labels = comma) +
+  labs(x = "Boletos Vendidos",
+       y = "")
+
+
+```
+
+
+
 Si queremos ver ahora en términos relativos, que sorteo ha mejorado/empeorado el nivel de boletos vendidos entre 2015 y 2019 se realiza la siguiente gráfica.
 
 ```{r}
@@ -793,6 +819,19 @@ df.global %>%
 df.aventurate %>% 
   ggplot(aes(ID, pib_pc)) +
   geom_boxplot()
+
+
+```
+
+
+Guardamos data procesada para el modelo
+
+```{r}
+
+data_modelo <- list(df.aventurate, df.educativo, df.sueno, df.tradicional, df.global)
+
+saveRDS(data_modelo, file = "Output/data_modelo.rds")
+
 
 
 ```
