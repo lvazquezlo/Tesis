@@ -19,6 +19,9 @@ library(nortest)
 library(MASS)
 library(car)
 library(moments)
+library(gglm)
+library(ggfortify)
+theme_set(theme_light())
 
 ```
 
@@ -117,7 +120,12 @@ ad.test(educ1$residuals)
 suen1 <- mod_log_log(df.sueno)
 autoplot(suen1)
 jb.norm.test(suen1$residuals)
+x <- rnorm(217, mean = 430, sd = 150)
+jb.norm.test(x)
+
+
 ad.test(suen1$residuals)
+
 #Tradicional
 trad1 <- mod_log_log(df.tradicional)
 autoplot(trad1)
@@ -218,9 +226,9 @@ mod_sq <- function(df){
 
 ```
 
-```{r}
+```{r box-cox transformation}
 
-mod <- lm(Venta_Estado ~ pib_pc + I(pib_pc ^ 2), data = df.aventurate)
+mod <- lm(Venta_Estado ~ pib_pc + I(pib_pc ^ 2), data = df.tradicional)
 summary(mod)
 
 b <- boxcox(mod)
@@ -236,7 +244,7 @@ sorted_bc <- bc[order(-lik),] # values are sorted to identify the lambda value f
 head(sorted_bc, n = 10)
 
 
-mod_t <- lm(Venta_Estado^(-0.10) ~ pib_pc + I(pib_pc ^ 2), data = df.aventurate)
+mod_t <- lm(Venta_Estado^(0.181818) ~ pib_pc + I(pib_pc ^ 2), data = df.tradicional)
 
 plot(mod_t$fitted.values, rstandard(mod_t)) # raw residuals vs fitted values
 
@@ -265,6 +273,66 @@ fittedvalues <- data.frame(original, after_transformation, back_transformation)
 head(fittedvalues, n = 10)
 
 jb.norm.test(rstandard(mod_t)) #Segun la prueba ya se distribuye normal
+
+```
+
+```{r box-cox fn}
+
+bxcx <- function(modelo, df){
+  
+  b <- boxcox(modelo)
+  lambda <- b$x # lambda values
+  lik <- b$y # log likelihood values for SSE
+  bc <- cbind(lambda, lik) # combine lambda and lik
+  sorted_bc <- bc[order(-lik),] # values are sorted to identify the lambda    value for the maximum log likelihood for obtaining minimum SSE  
+  lambda_selection <- round(sorted_bc[1,1],2) # lambda value selected for making the transformation
+  mod_t <- lm(Venta_Estado^(lambda_selection) ~ pib_pc + I(pib_pc^2), data = df)
+  
+  return(mod_t)
+
+}
+
+aven_sq <- lm(Venta_Estado ~ pib_pc + I(pib_pc ^ 2), data = df.aventurate)
+
+boxcox_model <- bxcx(aven_sq, df.aventurate)
+
+
+```
+
+Ya vi que el modelo no jala, le aplicamos box-cox
+
+```{r modelo cuadratico}
+
+#Sorteo Aventurate
+
+aventurate_sq <- lm(Venta_Estado ~ pib_pc + I(pib_pc ^ 2), data = df.aventurate)
+
+aventurate_sq <- bxcx(aventurate_sq, df.aventurate)
+autoplot(aventurate_sq)
+jb.norm.test(aventurate_sq$residuals)
+hist(aventurate_sq$residuals)
+
+#Sorteo Educativo
+
+educativo_sq <- lm(Venta_Estado ~ pib_pc + I(pib_pc ^ 2), data = df.educativo)
+educativo_sq <- bxcx(educativo_sq, df.educativo)
+autoplot(educativo_sq)
+jb.norm.test(educativo_sq$residuals)
+hist(educativo_sq$residuals)
+
+#Sorteo Mi Sueño
+
+sueno_sq <- lm(Venta_Estado ~ pib_pc + I(pib_pc ^ 2), data = df.sueno)
+sueno_sq <- bxcx(sueno_sq, df.sueno)
+autoplot(sueno_sq)
+jb.norm.test(sueno_sq$residuals)
+hist(sueno_sq$residuals)
+
+#Sorteo Tradicional
+tradicional_sq <- lm(Venta_Estado ~ pib_pc + I(pib_pc ^ 2), data = df.tradicional)
+tradicional_sq <- bxcx(tradicional_sq, df.tradicional)
+autoplot(tradicional_sq)
+hist(tradicional_sq$residuals)
 
 ```
 
@@ -306,9 +374,6 @@ stargazer(aven_sq, educ_sq, suen_sq, trad_sq, type = "text")
 
 
 ```
-
-
-
 
 
 
