@@ -48,7 +48,7 @@ setwd(ruta)
 
 ```
 
-Web scapping para la obtención de los Estados en los cuales se cuenta con un campus
+Web scrapping para la obtención de los Estados en los cuales se cuenta con un campus
 Tec de Mty
 
 ```{r sedes tec}
@@ -341,7 +341,7 @@ bp4 <- df.tradicional %>%
   labs(title = "")
 
 (bp1/bp2)
-(bp3/bp4)
+bp3
 
 ```
 
@@ -492,14 +492,14 @@ cp2 <- df.educativo %>%
   corplot()
 
 cp3 <- df.sueno %>% 
-  corplot() +
-  theme(legend.position = "none")
+  corplot() 
 
 cp4 <- df.tradicional %>% 
   corplot()
 
 (cp1|cp2)
 (cp3|cp4)
+cp3
 
 ```
 
@@ -535,6 +535,15 @@ sp2 <- df.educativo %>%
 
 (sp1/sp2)
 
+sp3 <- df.sueno %>% 
+  ggplot(aes(log(pib_pc), log(Venta_Estado))) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(subtitle = "Sorteo: Mi Sueño",
+       x = "ln(PIB pc)",
+       y = "ln(# Boletos)")
+
+sp3
 
 ```
 
@@ -577,6 +586,7 @@ Observamos que el sorteo educativo es el que vende más boletos. Esto tendría e
 df.global %>% 
   mutate(Sorteo = str_remove(Sorteo, "\\d+"),
          Sorteo = str_to_title(Sorteo)) %>% 
+    filter(Sorteo != "Tradicional ") %>% 
   group_by(Sorteo) %>% 
   summarise(n_boletos = sum(Venta_Estado)) %>% 
   mutate(Sorteo = fct_reorder(Sorteo, n_boletos)) %>% 

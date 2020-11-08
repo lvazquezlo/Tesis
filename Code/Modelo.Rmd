@@ -134,7 +134,7 @@ ad.test(trad1$residuals)
 
 #Agrupamos en una tabla
 
-stargazer(aven1, educ1, suen1, trad1, type = "latex")
+stargazer(aven1, educ1, suen1, type = "latex")
 
 ```
 
@@ -310,6 +310,8 @@ aventurate_sq <- lm(Venta_Estado ~ pib_pc + I(pib_pc ^ 2), data = df.aventurate)
 aventurate_sq <- bxcx(aventurate_sq, df.aventurate)
 autoplot(aventurate_sq)
 jb.norm.test(aventurate_sq$residuals)
+x <- rnorm(800, mean = 300, sd = 90)
+jb.norm.test(x)
 hist(aventurate_sq$residuals)
 
 #Sorteo Educativo
@@ -368,7 +370,7 @@ jb.norm.test(trad_sq$residuals)
 
 #Agrupamos en una tabla
 
-stargazer(aven_sq, educ_sq, suen_sq, trad_sq, type = "text")
+stargazer(aven_sq, educ_sq, suen_sq, type = "latex")
 
 
 
