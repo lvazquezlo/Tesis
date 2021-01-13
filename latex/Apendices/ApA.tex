@@ -1,20 +1,19 @@
-\chapter{Validación modelos econométricos}
+\chapter{Validación modelo (3.1)}
 
-Se presentan a continuación las validaciones de los modelos econométricos que se ajustaron. Es todos los casos el análisis de residuales fue satisfactorio y no hubo que transformar las variables para corregir algún problema. Para la gráfica de residuales vs ajustados no se observa alguna tendencia y los puntos se ven aleatorios, por este motivo no vemos la existencia de problemas de heterocedasticidad. Además, los residuales siguen una distribución normal por como se ve el QQ-Plot. Por otro lado, en ningún modelo se encontró problemas con datos influyentes o atípicos. 
 
-\newpage
+Se presenta a continuación la validación del modelo (3.1) que se aplicó a los 3 sorteos. Se observa que para todos los sorteos el modelo ajustado cumple con los supuesto de una regresión log-log. En las gráficas \textbf{\textit{Residuals vs Fitted}} no se observa alguna tendencia y los puntos se ven aleatorios, de esta forma no observamos la existencia de problemas de heterocedasticidad. En las gráficas \textbf{\textit{Normal Q-Q}} observamos que los cuantiles de los residuales están alineados con los cuantiles teóricos de una distribución normal. Por otro lado, en ningún modelo se encontraron datos influyentes o atípicos.
 
 \begin{figure}[H]
 \centering
 \label{fig:Validacion}
 \begin{subfigure}
   \centering
-  \caption{Validación modelo AventuraT}
-  \includegraphics[width=.85\linewidth]{Imagenes/log_avent.png}
+  \caption{Validación modelo (3.1) AventuraT}
+  \includegraphics[width=.85\linewidth]{Imagenes/log_aven.png}
 \end{subfigure}%
 \begin{subfigure}
   \centering
-  \caption{Validación modelo Educativo}
+  \caption{Validación modelo (3.1) Educativo}
   \includegraphics[width=.85\linewidth]{Imagenes/log_educ.png}
 \end{subfigure}
 \end{figure}
@@ -24,14 +23,27 @@ Se presentan a continuación las validaciones de los modelos econométricos que 
 \label{fig:Validacion2}
 \begin{subfigure}
   \centering
-  \caption{Validación modelo Mi Sueño}
+  \caption{Validación modelo (3.1) Mi Sueño}
   \includegraphics[width=.85\linewidth]{Imagenes/log_suen.png}
 \end{subfigure}%
-\begin{subfigure}
-  \centering
-  \caption{Validación modelo Tradicional}
-  \includegraphics[width=.85\linewidth]{Imagenes/log_trad.png}
-\end{subfigure}
 \end{figure}
+
+\\
+
+De igual forma, se aplicó la prueba Jarque-Bera para probar la normalidad en los residuales. Se obtuvieron los siguientes resultados:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}lrrlr@{}}
+\toprule
+\multicolumn{5}{c}{Jarque-Bera Test}                                                                \\ \midrule
+\multicolumn{1}{c}{Sorteo} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{Estadístico JB} &  & p-value \\ \midrule
+AventuraT                  &                      & 0.46628                            &  & 0.7725  \\
+Educativo                  &                      & 1.9813                             &  & 0.303   \\
+Mi Sueño                   &                      & 3.2751                             &  & 0.157   \\ \bottomrule
+\end{tabular}
+\end{table}
+
+De esta forma observamos que los modelos son válidos y justifican estadísticamente la utilización de los coeficientes estimados por el modelo (3.1) utilizados en esta tesis.
 
 \noindent 

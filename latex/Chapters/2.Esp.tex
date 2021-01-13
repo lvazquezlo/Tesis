@@ -1,8 +1,6 @@
 \chapter{Marco Teórico}
 
-%\noindent Esta investigación es un esfuerzo por intentar afianzar el vínculo entre los fundamentos microeconómicos y los fenómenos macroeconómicos: entre la mente de los individuos y la innovación en los mercados. 
 
-\newpage
 
 \section{Aversión al riesgo y loterías}
 
@@ -32,7 +30,7 @@ Por otro lado, también existe una clasificación de los individuos por su actit
     \item \textbf{Neutral al riesgo} cuando $U$ es lineal. A este tipo de individuos, le es indiferente jugar o no jugar.
 \end{enumerate}
 
-Para un individuo que es averso al riesgo, supongamos que $I_0$ representa su riqueza actual y $U(I_0)$ es la función de utilidad que refleja cómo se siente con diferentes niveles de riqueza. Si además, suponemos que $U(I_0)$ es cóncava podemos asumir que obtener una unidad monetaria extra agrega menos utilidad conforme la riqueza incrementa. A este individuo supongamos que se le ofrece participar en dos juegos, el primero es un volado con una moneda honesta y la posibilidad de ganar o perder \$$q$ y el segundo juego es también un volado con una moneda honesta pero ahora con la posibilidad de ganar o perder \$$2q$. \\
+Para un individuo que es averso al riesgo, supongamos que $I_0$ representa su riqueza actual y $U(\cdot)$ es la función de utilidad que refleja cómo se siente con diferentes niveles de riqueza. Si además, suponemos que $U(\cdot)$ es cóncava podemos asumir que obtener una unidad monetaria extra agrega menos utilidad conforme la riqueza incrementa. A este individuo supongamos que se le ofrece participar en dos juegos, el primero es un volado con una moneda honesta y la posibilidad de ganar o perder \$$q$ y el segundo juego es también un volado con una moneda honesta pero ahora con la posibilidad de ganar o perder \$$2q$. \\
 
 Ahora bien, para el primer juego se tiene que la utilidad esperada es $U_{1}(I_0)$ y está dada por: 
 
@@ -62,7 +60,7 @@ $$
 U(I_0) > U_{1}(I_0) > U_{2}(I_0)
 $$
 
-Con esto, podemos comprobar que un individuo averso al riesgo preferirá su riqueza inicial a jugar en una lotería justa y además preferirá una apuesta pequeña a una grande. Además, se puede observar que cuando se tiene una riqueza menor, ganar el premio le genera mayor utilidad al individuo a comparación de la situación en donde la riqueza es mayor donde si se gana el premio la utilidad no aumenta de manera significativa. \\
+Con esto, podemos comprobar que un individuo averso al riesgo preferirá su riqueza inicial a jugar en una lotería justa y además preferirá una apuesta pequeña a una grande. También, se puede observar que cuando se tiene una riqueza menor, ganar el premio le genera mayor utilidad al individuo a comparación de la situación en donde la riqueza es mayor donde si se gana el premio la utilidad no aumenta de manera significativa. \\
 
 Veamos un ejemplo numérico, supongamos que el indidividuo tiene una riqueza inicial $I_0 = \$100$ y se le propone apostar $\$80$ en un volado con una moneda honesta, por lo que la lotería quedaría definida de la siguiente manera:
 
@@ -80,17 +78,65 @@ Observamos que, el valor esperado de la lotería $E[L] = \$100$ y tiene dos opci
 
 \begin{itemize}
     \item No jugar y con probabilidad 1 tener $I_0 = \$100$ esto es $U(100)$
-    \item Jugar la lotería y tener de utilidad esperada $UE[L] = p_1U(x_1) + p_2U(x_2)$ = $\frac{U(180)+u(20)}{2}$
+    \item Jugar la lotería y tener de utilidad esperada $UE[L] = p_1U(x_1) + p_2U(x_2)$ = $\frac{U(180)+U(20)}{2}$
 \end{itemize} 
 
 \newpage
 
 Se tiene que, $U(100) > UE[L]$ esto debido a que al ser una función cóncava cualquier combinación lineal que se obtenga queda en el conjunto inferior dando una utilidad menor y por lo tanto prefiere no jugar. \\
 
+Lo anterior se utilizará para comprobar que los individuos representativos que participan en estas loterías son aversos al riesgo y ver que tipo de loterías son (justas o injustas). Con ello se podrá entender de mejor manera si la decisión de participar o no en la lotería compensa el \textit{trade-off} entre el riesgo tomado y el valor esperado del premio potencial.
+
 %VER SI ESTO LO DEJO O LO QUITO
 %Por otro lado, supongamos a una persona que se enfrenta a una apuesta donde las probabilidades de ganar \$12 o perder \$10 son 50:50. El valor esperado es de \$1, la decisión de aceptar o no esta lotería involucra un \textit{trade-off}: aceptar la apuesta significa tomar riesgo, pero también implica un mayor valor esperado.
 
 \newpage
+
+\section{Aversión al riesgo y riqueza}
+
+En la sección \textbf{1.1.3} se presenta la teoría de Arrow y Pratt donde se introduce una forma de medir cuantitativamente que tan averso al riesgo es un individuo. Con ello, surge la pregunta si la aversión al riesgo incrementa o disminuye dependiendo del nivel de riqueza con el que se cuenta. \\
+
+Para poder dar una respuesta al cuestionamiento anterior, Arrow y Pratt presentan una familia de funciones para entender los cambios en la aversión al riesgo cuando la riqueza cambia. Respecto a  la medida de \textit{aversión al riesgo absoluto} existen 3 tipos de funciones:  CARA, DARA  y IARA las cuales presentan aversión al riesgo constante, decreciente y creciente respectivamente. \\
+
+Algebráicamente lo anterior se obtiene de la derivada de la ecuación (1.6) para llegar a lo siguiente:
+
+$$
+r^{\prime}(W) = \left \{ \begin{matrix} <0  & \implies \mbox{DARA}
+\\ = 0 & \implies \mbox{CARA} 
+\\ >0 & \implies \mbox{IARA}
+
+\end{matrix}\right.
+$$ \\
+
+Para entender de mejor forma esta familia de funciones, consideremos dos niveles de riqueza $W_1$ y $W_2$ con $W_1 > W_2$ y un posible pago monetario de $x$. Adicionalmente, supongamos $u(\cdot)$ una función de utilidad de tipo Bernoulli. \\
+
+Un individuo con función de utilidad $u(\cdot)$ presenta aversión al riesgo absoluto decreciente (DARA) si:
+
+\begin{equation}
+    r(W_1 + x, u) < r(W_2 + x, u)
+\end{equation}
+
+Por otro lado, un individuo con función de utilidad $u(\cdot)$ presenta aversión al riesgo absoluto creciente (IARA) si:
+
+\begin{equation}
+    r(W_1 + x, u) > r(W_2 + x, u)
+\end{equation}
+
+Si tomamos ahora, una función de utilidad de la forma $u(W) = -e^{-\lambda W}$ con $\lambda > 0$ esta función de utilidad presenta aversión al riesgo absoluto constante (CARA) pues:
+
+\begin{equation*}
+    u^{\prime}(W)  & = \lambda e^{-\lambda W}, \: 
+    u^{\prime \prime}(W) & = - \lambda^{2} e^{-\lambda W}
+\end{equation*} 
+
+\begin{equation*}
+    \therefore r(W) = \lambda
+\end{equation*}
+
+Como se mencionó en la sección \textbf{1.1.3}, tratar de obtener estos coeficientes con los datos disponibles representa una dificultad dado que no se tiene una función de utilidad para cada individuo representativo de cada Estado y suponer una misma función de utilidad para todos no es lo ideal dado que no refleja la realidad. No se tomaría encuenta características ineherentes a cada Estado/Región que influyen en la percepción de la utilidad para cada individuo representativo. 
+
+\newpage
+
 
 \section{Elasticidades}
 \noindent Una pregunta que se puede hacer en torno al ingreso y la cantidad demandada de un bien es cómo cambia el comportamiento de los individuos ante aumentos o disminuciones en el ingreso. ¿Consumirán más, menos o una cantidad igual de ese bien? \\
@@ -106,7 +152,7 @@ Dentro de la teoría económica existen diferentes tipos de elasticidades, tales
 \end{itemize}
 
 %per capita?
-Para fines de esta tesis nos enfocaremos en la elasticidad ingreso para analizar los efectos y la sensibilidad existente entre la demanda de boletos del Sorteo TEC y el ingreso de los individuos. Realizaremos un estudio similar a los que se describen en la sección \textbf{1.2 Revisiòn de literatura}. \\ 
+Para fines de esta tesis nos enfocaremos en la elasticidad ingreso para analizar los efectos y la sensibilidad existente entre la demanda de boletos del Sorteo Tec y el ingreso de los individuos representativos de cada Estado. Realizaremos un estudio similar a los que se describen en la sección \textbf{1.2 Revisión de literatura}. \\ 
 
 Imaginemos dos situaciones, la primera donde la economía está en crecimiento y expansión, los individuos tienen ingresos más altos lo cual genera un aumento en la demanda de casi todos los bienes y servicios. La segunda, donde la economía se encuentra estancada o se empiezan a ver indicadores de que la economía empezará a decrecer, los individuos empiezan a tener menores ingresos lo cual genera una disminución en casi todos los bienes y servicios. \\
 
@@ -130,7 +176,7 @@ Dicha elasticidad ingreso puede ser positiva, negativa o cero:
 
 Cuando un bien es superior al ingreso quiere decir que si el ingreso aumenta, la cantidad demandada aumenta en mayor proporción que el aumento en el ingreso. Cuando un bien es normal al ingreso quiere decir que si el ingreso aumenta, la cantidad demandada aumenta en menor proporción que el aumento en el ingreso y si un bien es inferior al ingreso, quiere decir que ante un aumento en el ingreso, la cantidad demandada de ese bien disminuye. \\
 
-Así, buscaremos encontrar cuál es la elasticidad ingreso de los boletos del sorteo TEC para determinar qué tipo de bien es. Esto se relacionará con la teoría de elección bajo incertidumbre y su relación con la teoría de utilidad esperada para poder determinar cómo es el comportamiento de los individuos ante diferentes situaciones respecto al ingreso. \\
+Así, buscaremos encontrar cuál es la elasticidad ingreso de los boletos del Sorteo Tec para determinar qué tipo de bien es. Esto se relacionará con la teoría de elección bajo incertidumbre y su relación con la teoría de utilidad esperada para poder determinar cómo es el comportamiento de los individuos representativos de cada Estado ante diferentes situaciones respecto al ingreso. \\
 
 
 

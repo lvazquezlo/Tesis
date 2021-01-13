@@ -164,6 +164,8 @@ ln(boletos) ~ ln(pib pc) + campus
 campus: variable indicadora en donde se 1 si existe un campus tec en la entidad y 0 en caso contrario
 Agregar esta variable fue por comentarios recibidos de los sinodales
 
+Se observa que la inclusión de esta variable nos hace ver que el efecto fijo de tener un campus tec en la ciudad no es 
+
 ```{r modelo 2}
 
 mod_log_log2 <- function(df){
@@ -176,24 +178,31 @@ mod_log_log2 <- function(df){
 #Aventurate  
 aven2 <- mod_log_log2(df.aventurate)
 summary(aven2)
+anova(aven2)
+
+
 autoplot(aven2)
 jb.norm.test(aven2$residuals)
 
 #Educativo
 educ2 <- mod_log_log2(df.educativo)
 summary(educ2)
+anova(educ2)
+
 autoplot(educ2)
 jb.norm.test(educ2$residuals)
 
 #Mi sueño
 suen2 <- mod_log_log2(df.sueno)
 summary(suen2)
+anova(suen2)
 autoplot(suen2)
 jb.norm.test(suen2$residuals)
 
 #Tradicional
 trad2 <- mod_log_log2(df.tradicional)
 summary(trad2)
+anova(trad2)
 autoplot(trad2)
 jb.norm.test(trad2$residuals)
 
@@ -202,7 +211,7 @@ jb.norm.test(trad2$residuals)
 hist(trad2$residuals)
 #Agrupamos en una tabla
 
-stargazer(aven2, educ2, suen2, trad2, type = "latex")
+stargazer(aven2, educ2, suen2, trad2, type = "text")
 
 
 ```

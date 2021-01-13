@@ -2,35 +2,63 @@
 
 %\noindent Este capítulo está dividido en dos secciones.  
 
-\newpage
-
 \section{Antecedentes}
 
-\subsection{Bernoulli}
+\subsection{Daniel Bernoulli}
 
-El término utilidad fue presentado por primera vez en el siglo XVIII cuando Bernoulli y Cramer publican \textit{“Exposition of a New Theory on the Measurement of Risk”}\footnote{Bernoulli, D. (1954). \textit{Exposition of a New Theory on the Measurement of Risk}. Econometrica, 22(1), 23–36.} y se utiliza para dar solución a la paradoja de San Petersburgo. La versión estándar consiste en un juego con las siguientes reglas: una moneda honesta es lanzada hasta que caiga por primera vez en águila, en este punto el jugador gana $2^i$, donde $i$ es el número de veces que la moneda fue lanzada. \\
+El término utilidad fue presentado por primera vez en el siglo XVIII cuando Daniel Bernoulli y Gabriel Cramer publican \textit{“Exposition of a New Theory on the Measurement of Risk”}\footnote{Bernoulli, D. (1954). \textit{Exposition of a New Theory on the Measurement of Risk}. Econometrica, 22(1), 23–36.} y se utiliza para dar solución a la paradoja de San Petersburgo. La versión estándar consiste en un juego con las siguientes reglas: una moneda honesta es lanzada hasta que caiga por primera vez en águila, en este punto el jugador gana $2^i$, donde $i$ es el número de veces que la moneda fue lanzada. \\
 
-La pregunta resulta ser ¿Cuánto dinero está dispuesto el jugador a pagar para participar en este juego? para contestar la pregunta observamos que la probabilidad de obtener águila por primera vez en el i-ésimo lanzamiento es $(\frac{1}{2})^i$. \\
+La pregunta resulta ser ¿cuánto dinero está dispuesto el jugador a pagar para participar en este juego? para contestar la pregunta observamos que la probabilidad de obtener águila por primera vez en el i-ésimo lanzamiento es $(\frac{1}{2})^i$. \\
 
-Por lo que el valor esperado de este juego resulta en: $$E[x] = \sum_{i = 1} ^{\infty} \pi_i x_i = \sum_{i = 1} ^{\infty} 2^i (\frac{1}{2})^i = \infty $$ 
+Por lo que el valor esperado de este juego resulta en: 
 
-Esto querría decir que existiría un incentivo a que una persona pague un millón de pesos para poder jugar pues el millón de pesos resulta ser mucho menor que el valor esperado del juego.\\
+\begin{equation}
+E[x] = \sum_{i = 1} ^{\infty} \pi_i x_i = \sum_{i = 1} ^{\infty} 2^i (\frac{1}{2})^i = \infty 
+\end{equation}
+
+Donde $x_i$ es la variable aleatoria de la ganancia del jugador en el i-ésimo lanzamiento de la moneda y $\pi_i$ es la probabilidad de obtener águila en el i-ésimo lanzamiento. \\
+
+Esto querría decir que existiría un incentivo a que una persona pague una cantidad grande de dinero, por ejemplo, un millón de pesos para poder jugar pues el millón de pesos resulta ser mucho menor que el valor esperado del juego.\\
 
 La solución de Bernoulli recae en el argumento sobre que las personas no les interesa directamente cuánto es la ganancia monetaria del juego sino depende de la utilidad que esta ganancia monetaria genere en los individuos. Si se asume que la utilidad marginal de la riqueza decrece cuando la riqueza aumenta, esto es, que la curva de utilidad sea cóncava, el juego puede converger a una utilidad esperada finita con la cual se puede determinar el valor que estaría dispuesto a pagar un individuo por participar en el juego a lo cual Bernoulli llama \textit{“moral value”}. Se presenta una solución a la paradoja: \\
 
 Suponga que la utilidad del premio a recibir en el juego está dado por $U(x_i) = ln(x_i)$, esta función logarítimica cumple con ser cónvaca pues $U^\prime > 0$ y $U^{\prime \prime} < 0$. Calculamos la utilidad esperada y resulta que
 
-$$
-E[U(x_i)] = \sum_{i = 1} ^{\infty} \pi_i U(x_i) = \sum_{i = 1} ^{\infty} (\frac{1}{2})^i ln(2^i)= 2 ln(2)
-$$
+\begin{equation}
+    E[U(x_i)] = \sum_{i = 1} ^{\infty} \pi_i U(x_i) = \sum_{i = 1} ^{\infty} (\frac{1}{2})^i ln(2^i)= 2 ln(2)
+\end{equation} 
 
-De esta forma, observamos que la utilidad esperada de este juego es aproximadamente 1.39.
+Donde $x_i$ es la variable aleatoria de la ganancia del jugador en el i-ésimo lanzamiento de la moneda y $\pi_i$ es la probabilidad de obtener águila en el i-ésimo lanzamiento. \\
+
+El resultado anterior se puede demostrar mediante la derivada de la serie geométrica. De esta forma, observamos que la utilidad esperada de este juego es aproximadamente 1.39. \\
+
+El fundamento teórico de la solución a este juego se presenta en el mismo artículo. Como se mencionó previamente, Bernoulli propone que la función de utilidad que se utiliza para evaluar las apuestas debe ser una función de la riqueza total y no sólo de los ingresos actuales. \\
+
+Bernoulli sugiere una función de utilidad en términos de una ecuación diferencial. Propone que la utilidad marginal es inversamente proporcional a la riqueza W, de aquí que:
+
+\begin{equation}
+    \frac{du(W)}{dW} = \frac{a}{W}
+\end{equation}
+
+Para una constante $a$. Resolviendo la ecuación diferencial obtenemos que: 
+
+\begin{equation}
+    u(W) = a \: ln(W) + b
+\end{equation}
+
+Con $a,b$ constantes. Esto suguiere que, con esta función de utilidad, los individuos son aversos al riesgo. \\
+
+Lo anterior genera lo que hoy se conoce como \textit{funciones de utilidad de tipo Bernoulli}, funciones que son de gran importancia para Arrow y Pratt en su trabajo para la medición de la aversión al riesgo, el cual se desarrolla en la sección \textbf{1.1.3} de la presente tesis.
 
 \newpage
 
-\subsection{Von Neumann y Morgenstern}
+\subsection{John Von Neumann y Oskar Morgenstern}
 
-En 1944 Von Neumann y Morgenstern publican su libro “Theory of Games and Economic Behavior”\footnote{Neumann, V. J., \& Morgenstern, O. (1953). \textit{Theory of Games and Economic Behavior} (3rd ed.). New York, United States: Princeton University Press.} donde se presentan modelos matemáticos para estudiar el comportamiento económico de los individuos bajo condiciones de incertidumbre.   \\
+En 1944 John Von Neumann y Oskar Morgenstern publican su libro “\textit{Theory of Games and Economic Behavior}”\footnote{Neumann, V. J., \& Morgenstern, O. (1953). \textit{Theory of Games and Economic Behavior} (3rd ed.). New York, United States: Princeton University Press.} donde se presentan modelos matemáticos para estudiar el comportamiento económico de los individuos bajo condiciones de incertidumbre.   \\
+
+Con la teoría desarrollada por estos dos autores se definen conceptos relevantes para el desarrollo de esta tesis, los cuales se presentan a lo largo de esta sección. \\
+
+Uno de los teoremas dentro del análisis de la elección bajo incertidumbre es el \textit{Teorema de la Utilidad Esperada} en el que Von Neumann y Morgenster mencionan que si las preferencias de los individuos cumplen los axiomas de racionalidad entonces sus preferencias podían ser representadas por una función de utilidad. \\
 
 Definiremos qué es una lotería simple, término que se utilizará para explicar el \textit{Teorema de Utilidad Esperada}.
 
@@ -51,8 +79,8 @@ Para que las preferencias sean racionales se deben de cumplir los siguientes pun
     \end{enumerate}
     
     \item Continuidad: si para cualquier $L,L^\prime, L^{\prime \prime} \in \mathscr{L}$ los conjuntos
-    $$\{ \alpha \in [0,1] : \alpha L + (1-\alpha)L \succeq L^{\prime \prime}\} \subset [0,1]$$
-    $$\{ \alpha \in [0,1] : L^{\prime \prime} \succeq \alpha L + (a- \alpha) L^\prime \} \subset [0,1]$$
+    $$\{ \alpha \in [0,1] : \alpha L + (1-\alpha)L^{\prime} \succeq L^{\prime \prime}\} \subset [0,1]$$
+    $$\{ \alpha \in [0,1] : L^{\prime \prime} \succeq \alpha L + (1- \alpha) L^\prime \} \subset [0,1]$$
     
     son cerrados. Esto implica la existencia de una función de utilidad que representa $\succeq$, una función $U: \mathscr{L} \rightarrow \mathbb{R}$ tal que $L \succeq L^\prime \Leftrightarrow U(L) \geq U(L^\prime)$.
     
@@ -63,13 +91,11 @@ Para que las preferencias sean racionales se deben de cumplir los siguientes pun
     En otras palabras, esto significa que si mezclamos cada una de las dos loterías con una tercera, el orden de preferencia de las mezclas no depende de la tercera lotería usada en particular.
 \end{itemize}
 
-Uno de los teoremas dentro del análisis de la elección bajo incertidumbre es el \textit{Teorema de la Utilidad Esperada} en el que Von Neumann y Morgenster mencionan que si las preferencias de los individuos cumplen los axiomas de racionalidad entonces sus preferencias podían ser representadas por una función de utilidad. \\
-
 El \textit{Teorema de la Utilidad Esperada} (Mass-Collel et al,1995, p.176) dice que, si suponemos que la relación de preferencia racional $\succeq$ en el espacio de loterías $\mathscr{L}$ satisface los axiomas de continuidad e independencia entonces $\succeq$ admite una representación de la utilidad en forma de utilidad esperada. Esto es, podemos asignar un número $u_n$ a cada pago $n = 1, \dots, N$ de tal manera que para cualesquiera dos loterías $L = (p_1,\dots,p_N)$ y $L^\prime = (p^{\prime}_1,\dots, p^{\prime}_N)$ se tiene que
 
-$$
-L \succeq L^\prime \Leftrightarrow \sum ^{N}_{n = 1} u_n p_n \geq \sum ^{N}_{n = 1} u_n p^{\prime}_n
-$$ \\
+\begin{equation}
+    L \succeq L^\prime \Leftrightarrow \sum ^{N}_{n = 1} u_n p_n \geq \sum ^{N}_{n = 1} u_n p^{\prime}_n
+\end{equation}
 
 Este teorema ha generado mucha discusión al paso de los años; uno de los comentarios más fuertes que se le ha hecho al Teorema de Utilidad Esperada ha sido la \textit{paradoja de Allais} (Mass-Collel et al, 1995, p.179) formulada en 1953 por Maurice Allais. En ella se plantea un experimento como el siguiente: \\
 
@@ -103,9 +129,37 @@ Supongamos una función de utilidad U(·) y aplicamos el \textit{Teorema de Util
     & (0.11)U(250,000) + (0.89)U(0) \geq (0.1)U(1,250,000) + (0.9)U(0) 
 \end{align*}
 
-Entonces, $U(L_2) \geq U(L^{\prime}_2)$ por lo tanto $L_2 \succeq L^{\prime}_2$. Con lo anterior podemos decir que los individuos deben de escoger $L_1 \succeq L^{\prime}_1$ y $L_2 \succeq L^{\prime}_2$ o $L^{\prime}_1 \succeq L_1$ y $L^{\prime}_2 \succeq L_2$ y es aquí donde Allais encuentra la inconsistencia.
+Entonces, $U(L_2) \geq U(L^{\prime}_2)$ por lo tanto $L_2 \succeq L^{\prime}_2$. Con lo anterior podemos decir que los individuos deben de escoger $L_1 \succeq L^{\prime}_1$ y $L_2 \succeq L^{\prime}_2$ o $L^{\prime}_1 \succeq L_1$ y $L^{\prime}_2 \succeq L_2$ y es aquí donde Allais encuentra la inconsistencia. \\
+
+La importancia que tienen el Teorema de Utilidad Esperada en este trabajo es poder dar un fundamento matemático a la elección de los individuos ante situaciones de incertidumbre, esto se traduce en las preferencias que tiene cada individuo. Además, estas preferencias ordenadas incluyen al axioma de independencia, esto implica que la función de utilidad esperada representa que el ordenamiento de las preferencias es lineal en las probabilidades. La mención sobre la \textit{paradoja de Allais} es para ejemplificar la posibilidad de que los individuos no respondan a las probabilidades de manera lineal.
 
 \newpage
+
+\subsection{Kenneth J. Arrow y Jhon W. Pratt}
+
+Dos autores que contribuyeron de gran forma a la medición de la aversión al riesgo fueron Kenneth J. Arrow y Jhon W. Pratt, quienes publican por separado sus descubrimientos acerca del tema. Cómo se mencionó en la sección \textbf{1.1.1}, Arrow y Pratt utilizan como base de sus teorías a las \textit{funciones de utilidad de tipo Bernoulli}. \\
+
+Con el trabajo de Arrow y Pratt se desarolla un coeficiente para obtener el grado de aversión al riesgo de los individuos y poder hacer comparaciones. Se define como la \textit{medida Arrow-Pratt de aversión al riesgo absoluta} a:
+
+\begin{equation}
+    r(W) = \frac{-u^{\prime \prime}(W)}{u^{\prime}(W)}
+\end{equation}
+
+Donde $W$ representa la riqueza del individuo y $u(\cdot)$ es una función de utilidad de tipo Bernoulli doblemente diferenciable. \\
+
+Ahora bien, sean 2 individuos M y N con funciones de utilidad (cóncavas y doblemente diferenciables) $u_M(\cdot)$ y $u_N(\cdot)$ respectivamente. El individuo N es \textit{más averso al riesgo} que el individuo M a un nivel de riqueza $W$ si:
+
+\begin{equation}
+    r_M(W) = \frac{-u_M^{\prime \prime}(W)}{u_M^{\prime}(W)} < \frac{-u_N^{\prime \prime}(W)}{u_N^{\prime}(W)} = r_N(W)
+\end{equation} \\
+
+Este coeficiente permite comparar el comportamiento hacia situaciones de riesgo en donde el resultado del evento recae en ganancias o pérdidas absolutas sobre el actual nivel $W$ de la riqueza de los individuos. Es importante mencionar que este coeficiente es una medida local de la aversión al riesgo, para un nivel diferente de la riqueza $W$ la comparación puede cambiar. \\
+
+%CHECAR ESTO, NO SE SI VALGA LA PENA COMPARAR ESTADO CONTRA ESTADO
+%TAL VEZ SI PERO VALIDAR. EL PROBLEMA ES QUE NO TENGO UNA FUNCION DE UTILIDAD PARA CADA INDIVIDUO, ES SUPONER QUE TODOS SIGUEN UNA MISMA FUNCION DE UTILIDAD LO CUAL ES UN SUPUESTO BASTANTE FUERTE.
+
+La importancia de Arrow y Pratt para esta tesis recae en el hecho que se presenta una forma de comparar el nivel de la aversión al riesgo entre los individuos representativos de cada Estado en los que se venden boletos del Sorteo Tec. Es importante mencionar que lo anterior representa una dificultad dado que, no se tiene una función de utilidad para cada individuo representativo de cada Estado, suponer una misma función de utilidad para todos no es práctico pues no refleja la realidad.
+
 
 \section{Revisión de literatura}
 
@@ -126,11 +180,11 @@ Asumen que la compra de los boletos de lotería es idéntica a cualquier otro bi
     & i = 1,2,\dots, N
 \end{align*}
 
-Donde N es el número de observaciones, $y_i$ es la variable dependiente definida como el gasto individual en boletos de la lotería nacional y $X_i$ es un vector de covarianzas del individuo $i$ de las variables edad, ingreso, ingreso/número de habitantes en el hogar, estado civil, soltero, años de educación y si tiene un empleo. Toman además que $u \sim N(0, \sigma^2_i)$ y de esta manera llegan al \textit{Tobit Estimator} que resulta ser la función de verosimilitud para las N observaciones generado por el modelo. \\
+Donde N es el número de observaciones, $y_i$ es la variable dependiente definida como el gasto individual en boletos de la lotería nacional y $X_i$ es un vector de covariables del individuo $i$ de las variables edad, ingreso, ingreso/número de habitantes en el hogar, estado civil, soltero, años de educación y si tiene un empleo. Toman además que $u_i \sim N(0, \sigma^2)$ y de esta manera llegan al \textit{Tobit Estimator} que resulta ser la función de verosimilitud para las N observaciones generado por el modelo. \\
 
 Los resultados obtenidos por Pérez y Humphreys fueron que la edad influía de tal forma que el gasto en boletos de lotería iba incrementando de joven a adulto, teniendo su máximo en 46 años y a partir de esta edad empieza a disminuir; los hombres gastan más en boletos para la lotería que las mujeres; la mayoría son casados/casadas y tienen pocos años de formación académica. \\
 
-Asimismo, Obtienen la estimación de la elasticidad ingreso de los boletos de lotería y concluyen que estos son un \textbf{bien normal al ingreso} y que un incremento en el ingreso hace que las personas que ya juegan a la lotería gasten más en boletos y a las personas que no juegan a la lotería no las incentiva a participar.
+Asimismo, obtienen la estimación de la elasticidad ingreso de los boletos de lotería y concluyen que éstos son un \textbf{bien normal al ingreso} y que un incremento en el ingreso hace que las personas que ya juegan a la lotería gasten más en boletos y que las personas que no juegan a la lotería no las incentiva a participar.
 
 \newpage
 
@@ -169,13 +223,15 @@ $$
 \text{ln} \ Sales_{i,t} = \alpha + \beta_1 (premio_t) + \beta_2 (\text{ln} \ HH \ Income_i) + \beta_3 (\text{ln} \ HH \ Income_i : premio_t)
 $$
 
-Donde, los índices $i$ son para los códigos postales y $t$ para los índices de tiempo. La variable ln HHIncome es el logaritmo natural del ingreso medio de los habitantes del $i$ código postal. La variable dependiente es el logaritmo natural de las ventas por persona de boletos de la lotería. \\
+Donde, los índices $i$ son para los códigos postales y $t$ para los índices de tiempo. La variable ln $HHIncome$ es el logaritmo natural del ingreso medio de los habitantes del código postal $i$. La variable dependiente es el logaritmo natural de las ventas por persona de boletos de la lotería. \\
 
-Ahora bien, el coeficiente de interés para Oster es $\beta_3$, que representa la elasticidad ingreso de las ventas respecto al tamaño del premio. La estimación del modelo resulta en $\alpha = $ -1.066, \ $\beta_1 = $ 0.011, $\beta_2 = $ -0.709 \ y $\beta_3 = $ 0.00214 (todos los coeficientes fueron significativos al 1\%). \\
+Ahora bien, el coeficiente de interés para Oster es $\beta_3$, que representa la elasticidad ingreso de las ventas respecto al tamaño del premio. Este coeficiente resulta el más importante dado que la autora quiere medir la interacción entre el ingreso observado en cada código postal (zonas geográficas) y el premio a recibir contra el número de boletos vendidos. La estimación del modelo resulta en $\alpha = $ -1.066, \ $\beta_1 = $ 0.011, $\beta_2 = $ -0.709 \ y $\beta_3 = $ 0.00214 (todos los coeficientes fueron significativos al 1\%). \\
 
-Así, se obtuvo que la elasticidad ingreso es de 0.0021, esto implica que un aumento en el 10\% del ingreso incrementa la sensibilidad en la respuesta al premio en un 0.02\%. Con el resultado anterior, se obtiene que el boleto es un \textbf{bien nomal al ingreso}. Después de obtener esta elasticidad, Oster realiza otra regresión en donde las ventas están en función de los ingresos medios de los participantes de la muestra y compara el resultado contra el tamaño de la bolsa del premio. Encuentra que la elasticidad ingreso aumenta a medida que el premio aumenta.   
+Así, se obtuvo que la elasticidad ingreso es de 0.0021, esto implica que un aumento en el 10\% del ingreso incrementa la sensibilidad en la respuesta al premio en un 0.02\%. Con el resultado anterior, se obtiene que el boleto es un \textbf{bien nomal al ingreso}. \\
 
+Después de obtener esta elasticidad, Oster realiza otra regresión en donde las ventas están en función de los ingresos medios de los participantes de la muestra y compara el resultado contra el tamaño de la bolsa del premio. Encuentra que la elasticidad ingreso aumenta a medida que el premio aumenta. \\
 
+Considerando lo anterior, en los 3 artículos citados en la sección \textbf{1.2} se observa que para las loterías analizadas todas son bienes normales al ingreso. Punto que difiere con el objetivo de esta tesis que es probar que las loterías del Sorteo Tec son bienes superiores al ingreso.
 
 
 
